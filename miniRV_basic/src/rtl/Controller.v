@@ -28,8 +28,10 @@ module Controller (
     wire BNE   = (opcode == 7'b1100011) && (funct3 == 3'b001);
     wire LUI   = (opcode == 7'b0110111);
     wire JAL   = (opcode == 7'b1101111);
-    wire MUL = is_mul; 
-    wire DIV = is_div;
+    wire MUL   = (opcode == 7'b0110011) && (funct3 == 3'b000) && (funct7 == 7'b0000001);
+    wire MULH  = (opcode == 7'b0110011) && (funct3 == 3'b001) && (funct7 == 7'b0000001);
+    wire MULHU = (opcode == 7'b0110011) && (funct3 == 3'b011) && (funct7 == 7'b0000001);
+    wire DIV;
 
  
     // npc_op，表示下一个指令是PC+4还是跳转
@@ -41,7 +43,7 @@ module Controller (
     wire RF_OP_WE = ADDI | ORI | SLLI | LW | LUI | JAL;
     
     // rf_wsel，表示写回的数据来自哪里
-    wire WB_OP_ALU = ADDI | ORI | SLLI| MUL;
+    wire WB_OP_ALU = ADDI | ORI | SLLI| MUL | MULH | MULHU;
     wire WB_OP_RAM = LW;
     wire WB_OP_PC4 = JAL;
     wire WB_OP_EXT = LUI;
@@ -59,13 +61,15 @@ module Controller (
     wire ALU_OP_EQ    = BEQ;
     wire ALU_OP_NE    = BNE;
     wire ALU_OP_MUL   = MUL;
+    wire ALU_OP_MULH    = MULH;
+    wire ALU_OP_MULHU    = MULHU;
     
     // alua_sel
-    wire ALU_A_SEL_RS1 = ADDI | ORI | SLLI | LW | BEQ | BNE | JAL | MUL;
+    wire ALU_A_SEL_RS1 = ADDI | ORI | SLLI | LW | BEQ | BNE | JAL | MUL | MULH | MULHU;
     wire ALU_A_SEL_PC  = 1'b0;
                         
     // alub_sel
-    wire ALU_B_SEL_RS2 = BEQ | BNE | MUL;
+    wire ALU_B_SEL_RS2 = BEQ | BNE | MUL | MULH | MULHU;
     wire ALU_B_SEL_EXT = ADDI | ORI | SLLI | LW | JAL;
         
     // ram_r_op
@@ -100,7 +104,10 @@ module Controller (
                   | {5{ALU_OP_OR   }} & `ALU_OR
                   | {5{ALU_OP_SLL  }} & `ALU_SLL
                   | {5{ALU_OP_EQ   }} & `ALU_EQ
-                  | {5{ALU_OP_NE   }} & `ALU_NE;
+                  | {5{ALU_OP_NE   }} & `ALU_NE
+                  | {5{ALU_OP_MUL  }} & `ALU_MUL
+                  | {5{ALU_OP_MULH }} & `ALU_MULH
+                  | {5{ALU_OP_MULHU}} & `ALU_MULHU;
 
     assign alua_sel = ALU_A_SEL_PC & `ALU_A_PC | ALU_A_SEL_RS1 & `ALU_A_RS1;
 
@@ -116,7 +123,7 @@ module Controller (
                     | {4{RAM_W_H}} & `RAM_WE_H
                     | {4{RAM_W_W}} & `RAM_WE_W;
 
-    assign is_mul = 1'b0;
-    assign is_div = 1'b0;
+    assign is_mul = MUL;
+    assign is_div = DIV;
 
 endmodule

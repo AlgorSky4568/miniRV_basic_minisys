@@ -11,6 +11,9 @@
 `define ALU_SLL     5'h05
 `define ALU_EQ      5'h08
 `define ALU_NE      5'h09
+`define ALU_MUL     5'h0a
+`define ALU_MULH    5'h0b
+`define ALU_MULHU   5'h0c
     
 `define NPC_PC4     2'b00
 `define NPC_BRA     2'b10

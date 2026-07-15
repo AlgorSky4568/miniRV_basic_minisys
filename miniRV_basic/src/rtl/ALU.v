@@ -28,6 +28,7 @@ module ALU (
             `ALU_ADD  : c = a + b;
             `ALU_OR   : c = a | b;
             `ALU_SLL  : c = a << b[4:0];
+            `ALU_MUL  : c = mul_res;
             default   : c = 32'h0;
         endcase
     end
@@ -44,8 +45,7 @@ module ALU (
     assign mulu_flag = 1'b0;
     assign div_flag  = 1'b0;
     assign divu_flag = 1'b0;
-    // assign busy      = mul_busy | mulu_busy | div_busy | divu_busy;
-    assign busy      = 1'b0;
+    assign busy      = mul_busy | mulu_busy | div_busy | divu_busy;
 
     always @(posedge clk) begin
         if (mul_flag | mulu_flag | div_flag | divu_flag)
