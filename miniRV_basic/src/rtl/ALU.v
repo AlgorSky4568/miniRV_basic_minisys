@@ -28,7 +28,9 @@ module ALU (
             `ALU_ADD  : c = a + b;
             `ALU_OR   : c = a | b;
             `ALU_SLL  : c = a << b[4:0];
-            `ALU_MUL  : c = mul_res;
+            `ALU_MUL  : c = mul_res[31:0];
+            `ALU_MULH : c = mul_res[63:32];
+            `ALU_MULHU: c = mulu_res[63:32];
             default   : c = 32'h0;
         endcase
     end
