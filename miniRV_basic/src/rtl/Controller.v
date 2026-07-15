@@ -32,6 +32,13 @@ module Controller (
     wire MULH  = (opcode == 7'b0110011) && (funct3 == 3'b001) && (funct7 == 7'b0000001);
     wire MULHU = (opcode == 7'b0110011) && (funct3 == 3'b011) && (funct7 == 7'b0000001);
     wire DIV;
+    wire DIVU;
+    wire REM;
+    wire REMU;
+    wire SLT = (opcode == 7'b0110011) && (funct3 == 3'b010) && (funct7 == 7'b0000000);
+    wire SLTI = (opcode == 7'b0010011) && (funct3 == 3'b010);
+    wire SLTU = (opcode == 7'b0110011) && (funct3 == 3'b011) && (funct7 == 7'b0000000);
+    wire SLTIU = (opcode == 7'b0010011) && (funct3 == 3'b011);
 
  
     // npc_op，表示下一个指令是PC+4还是跳转
@@ -40,16 +47,16 @@ module Controller (
     wire NPC_OP_PC4 = !NPC_OP_BRA & !NPC_OP_JMP;
     
     // rf_we，表示是否使用立即数
-    wire RF_OP_WE = ADDI | ORI | SLLI | LW | LUI | JAL;
+    wire RF_OP_WE = ADDI | ORI | SLLI | LW | LUI | JAL | SLTI | SLTIU;
     
     // rf_wsel，表示写回的数据来自哪里
-    wire WB_OP_ALU = ADDI | ORI | SLLI| MUL | MULH | MULHU;
+    wire WB_OP_ALU = ADDI | ORI | SLLI| MUL | MULH | MULHU | SLT | SLTI | SLTU | SLTIU;
     wire WB_OP_RAM = LW;
     wire WB_OP_PC4 = JAL;
     wire WB_OP_EXT = LUI;
     
     // sext_op，表示该用哪种立即数
-    wire EXT_OP_I = ADDI | ORI | SLLI | LW;
+    wire EXT_OP_I = ADDI | ORI | SLLI | LW | SLTI | SLTIU;
     wire EXT_OP_B = BEQ | BNE;
     wire EXT_OP_U = LUI;
     wire EXT_OP_J = JAL;
@@ -63,14 +70,15 @@ module Controller (
     wire ALU_OP_MUL   = MUL;
     wire ALU_OP_MULH    = MULH;
     wire ALU_OP_MULHU    = MULHU;
+    wire ALU_OP_SLT = SLT;
     
     // alua_sel
-    wire ALU_A_SEL_RS1 = ADDI | ORI | SLLI | LW | BEQ | BNE | JAL | MUL | MULH | MULHU;
+    wire ALU_A_SEL_RS1 = ADDI | ORI | SLLI | LW | BEQ | BNE | JAL | MUL | MULH | MULHU | SLT | SLTI | SLTU | SLTIU;
     wire ALU_A_SEL_PC  = 1'b0;
                         
     // alub_sel
-    wire ALU_B_SEL_RS2 = BEQ | BNE | MUL | MULH | MULHU;
-    wire ALU_B_SEL_EXT = ADDI | ORI | SLLI | LW | JAL;
+    wire ALU_B_SEL_RS2 = BEQ | BNE | MUL | MULH | MULHU | SLT | SLTU;
+    wire ALU_B_SEL_EXT = ADDI | ORI | SLLI | LW | JAL | SLTI | SLTIU;
         
     // ram_r_op
     wire RAM_EXT_B  = 1'b0;
