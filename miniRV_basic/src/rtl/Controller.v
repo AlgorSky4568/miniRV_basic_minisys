@@ -41,7 +41,7 @@ module Controller (
     wire SLTIU = (opcode == 7'b0010011) && (funct3 == 3'b011);
     wire OR = (opcode == 7'b0110011) && (funct3 == 3'b110) && (funct7 == 7'b0000000);
     wire AND = (opcode == 7'b0110011) && (funct3 == 3'b111) && (funct7 == 7'b0000000);
-    wire ANDI = (opcode == 7'b0010011) && (funct3 == 3'b000);
+    wire ANDI = (opcode == 7'b0010011) && (funct3 == 3'b111);
     wire BLT = (opcode == 7'b1100011) && (funct3 == 3'b100);
     wire BGE = (opcode == 7'b1100011) && (funct3 == 3'b101);
     wire BLTU = (opcode == 7'b1100011) && (funct3 == 3'b110);
@@ -54,7 +54,7 @@ module Controller (
     wire NPC_OP_JMP = JAL;
     wire NPC_OP_PC4 = !NPC_OP_BRA & !NPC_OP_JMP;
     
-    // rf_we，表示是否使用立即数
+    // rf_we，表示是否写回
     wire RF_OP_WE = ADDI | ORI | SLLI | LW | LUI | JAL | SLTI | SLTIU | BLT | BGE | BLTU | BGEU | ANDI;
     
     // rf_wsel，表示写回的数据来自哪里

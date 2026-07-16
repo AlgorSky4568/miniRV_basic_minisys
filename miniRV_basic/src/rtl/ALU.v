@@ -54,10 +54,10 @@ module ALU (
         endcase
     end
 
-    assign mul_flag  = 1'b0;
-    assign mulu_flag = 1'b0;
-    assign div_flag  = 1'b0;
-    assign divu_flag = 1'b0;
+    assign mul_flag  = (op == `ALU_MUL || op == `ALU_MULH) ? 1'b1 : 1'b0;
+    assign mulu_flag = (op == `ALU_MULHU) ? 1'b1 : 1'b0;
+    assign div_flag  = (op == `ALU_DIV || op == `ALU_REM) ? 1'b1 : 1'b0;
+    assign divu_flag = (op == `ALU_DIVU || op == `ALU_REMU) ? 1'b1 : 1'b0;
     assign busy      = mul_busy | mulu_busy | div_busy | divu_busy;
 
     always @(posedge clk) begin
