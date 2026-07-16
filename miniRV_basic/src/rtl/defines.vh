@@ -18,6 +18,11 @@
 `define ALU_DIVU   5'h0e
 `define ALU_REM   5'h0f
 `define ALU_REMU   5'h10
+`define ALU_SLT   5'h11
+`define ALU_SLTI   5'h12
+`define ALU_SLTU   5'h13
+`define ALU_SLTIU   5'h14
+
     
 `define NPC_PC4     2'b00
 `define NPC_BRA     2'b10

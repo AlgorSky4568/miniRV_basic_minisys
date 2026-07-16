@@ -35,6 +35,10 @@ module ALU (
             `ALU_DIVU: c = divu_quo;
             `ALU_REM:c = div_rem;
             `ALU_REMU:c = divu_rem;
+            `ALU_SLT: c = ($signed(a) < $signed(b));
+            `ALU_SLTI:c = (a<b);
+            `ALU_SLTI:c = ($signed(a) < $signed(b));
+            `ALU_SLTIU:c = (a<b);
             default   : c = 32'h0;
         endcase
     end
