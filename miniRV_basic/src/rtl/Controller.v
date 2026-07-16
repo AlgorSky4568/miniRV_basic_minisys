@@ -31,10 +31,10 @@ module Controller (
     wire MUL   = (opcode == 7'b0110011) && (funct3 == 3'b000) && (funct7 == 7'b0000001);
     wire MULH  = (opcode == 7'b0110011) && (funct3 == 3'b001) && (funct7 == 7'b0000001);
     wire MULHU = (opcode == 7'b0110011) && (funct3 == 3'b011) && (funct7 == 7'b0000001);
-    wire DIV;
-    wire DIVU;
-    wire REM;
-    wire REMU;
+    wire DIV = (opcode == 7'b0110011) && (funct3 == 3'b100) && (funct7 == 7'b0000001);
+    wire DIVU = (opcode == 7'b0110011) && (funct3 == 3'b101) && (funct7 == 7'b0000001);
+    wire REM = (opcode == 7'b0110011) && (funct3 == 3'b110) && (funct7 == 7'b0000001);
+    wire REMU = (opcode == 7'b0110011) && (funct3 == 3'b111) && (funct7 == 7'b0000001);
     wire SLT = (opcode == 7'b0110011) && (funct3 == 3'b010) && (funct7 == 7'b0000000);
     wire SLTI = (opcode == 7'b0010011) && (funct3 == 3'b010);
     wire SLTU = (opcode == 7'b0110011) && (funct3 == 3'b011) && (funct7 == 7'b0000000);
@@ -50,7 +50,7 @@ module Controller (
     wire RF_OP_WE = ADDI | ORI | SLLI | LW | LUI | JAL | SLTI | SLTIU;
     
     // rf_wsel，表示写回的数据来自哪里
-    wire WB_OP_ALU = ADDI | ORI | SLLI| MUL | MULH | MULHU | SLT | SLTI | SLTU | SLTIU;
+    wire WB_OP_ALU = ADDI | ORI | SLLI| MUL | MULH | MULHU | DIV | DIVU | REM | REMU | SLT | SLTI | SLTU | SLTIU;
     wire WB_OP_RAM = LW;
     wire WB_OP_PC4 = JAL;
     wire WB_OP_EXT = LUI;
@@ -70,14 +70,18 @@ module Controller (
     wire ALU_OP_MUL   = MUL;
     wire ALU_OP_MULH    = MULH;
     wire ALU_OP_MULHU    = MULHU;
+    wire ALU_OP_DIV = DIV;
+    wire ALU_OP_DIVU = DIVU;
+    wire ALU_OP_REM = REM;
+    wire ALU_OP_REMU = REMU;
     wire ALU_OP_SLT = SLT;
     
     // alua_sel
-    wire ALU_A_SEL_RS1 = ADDI | ORI | SLLI | LW | BEQ | BNE | JAL | MUL | MULH | MULHU | SLT | SLTI | SLTU | SLTIU;
+    wire ALU_A_SEL_RS1 = ADDI | ORI | SLLI | LW | BEQ | BNE | JAL | MUL | MULH | MULHU | DIV | DIVU | REM | REMU | SLT | SLTI | SLTU | SLTIU;
     wire ALU_A_SEL_PC  = 1'b0;
                         
     // alub_sel
-    wire ALU_B_SEL_RS2 = BEQ | BNE | MUL | MULH | MULHU | SLT | SLTU;
+    wire ALU_B_SEL_RS2 = BEQ | BNE | MUL | MULH | MULHU | DIV | DIVU | REM | REMU | SLT | SLTU;
     wire ALU_B_SEL_EXT = ADDI | ORI | SLLI | LW | JAL | SLTI | SLTIU;
         
     // ram_r_op
@@ -115,7 +119,11 @@ module Controller (
                   | {5{ALU_OP_NE   }} & `ALU_NE
                   | {5{ALU_OP_MUL  }} & `ALU_MUL
                   | {5{ALU_OP_MULH }} & `ALU_MULH
-                  | {5{ALU_OP_MULHU}} & `ALU_MULHU;
+                  | {5{ALU_OP_MULHU}} & `ALU_MULHU
+                  | {5{ALU_OP_DIV}} & `ALU_DIV
+                  | {5{ALU_OP_DIVU}} & `ALU_DIVU
+                  | {5{ALU_OP_REM}} & `ALU_REM
+                  | {5{ALU_OP_REMU}} & `ALU_REMU;
 
     assign alua_sel = ALU_A_SEL_PC & `ALU_A_PC | ALU_A_SEL_RS1 & `ALU_A_RS1;
 
@@ -131,7 +139,7 @@ module Controller (
                     | {4{RAM_W_H}} & `RAM_WE_H
                     | {4{RAM_W_W}} & `RAM_WE_W;
 
-    assign is_mul = MUL;
-    assign is_div = DIV;
+    assign is_mul = MUL | MULH | MULHU;
+    assign is_div = DIV | DIVU | REM | REMU;
 
 endmodule
