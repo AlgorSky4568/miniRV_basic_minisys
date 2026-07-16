@@ -39,6 +39,9 @@ module Controller (
     wire SLTI = (opcode == 7'b0010011) && (funct3 == 3'b010);
     wire SLTU = (opcode == 7'b0110011) && (funct3 == 3'b011) && (funct7 == 7'b0000000);
     wire SLTIU = (opcode == 7'b0010011) && (funct3 == 3'b011);
+    wire OR = (opcode == 7'b0110011) && (funct3 == 3'b110) && (funct7 == 7'b0000000);
+    wire AND = (opcode == 7'b0110011) && (funct3 == 3'b111) && (funct7 == 7'b0000000);
+    wire ANDI = (opcode == 7'b0010011) && (funct3 == 3'b000);
     wire BLT = (opcode == 7'b1100011) && (funct3 == 3'b100);
     wire BGE = (opcode == 7'b1100011) && (funct3 == 3'b101);
     wire BLTU = (opcode == 7'b1100011) && (funct3 == 3'b110);
@@ -52,23 +55,23 @@ module Controller (
     wire NPC_OP_PC4 = !NPC_OP_BRA & !NPC_OP_JMP;
     
     // rf_we，表示是否使用立即数
-    wire RF_OP_WE = ADDI | ORI | SLLI | LW | LUI | JAL | SLTI | SLTIU | BLT | BGE | BLTU | BGEU;
+    wire RF_OP_WE = ADDI | ORI | SLLI | LW | LUI | JAL | SLTI | SLTIU | BLT | BGE | BLTU | BGEU | ANDI;
     
     // rf_wsel，表示写回的数据来自哪里
-    wire WB_OP_ALU = ADDI | ORI | SLLI| MUL | MULH | MULHU | DIV | DIVU | REM | REMU | SLT | SLTI | SLTU | SLTIU;
+    wire WB_OP_ALU = ADDI | ORI | SLLI| MUL | MULH | MULHU | DIV | DIVU | REM | REMU | SLT | SLTI | SLTU | SLTIU | AND | ANDI | OR;
     wire WB_OP_RAM = LW;
     wire WB_OP_PC4 = JAL;
     wire WB_OP_EXT = LUI;
     
     // sext_op，表示该用哪种立即数
-    wire EXT_OP_I = ADDI | ORI | SLLI | LW | SLTI | SLTIU;
+    wire EXT_OP_I = ADDI | ORI | SLLI | LW | SLTI | SLTIU | ANDI;
     wire EXT_OP_B = BEQ | BNE | BLT | BGE | BLTU | BGEU;
     wire EXT_OP_U = LUI;
     wire EXT_OP_J = JAL;
     
     // alu_op，表示ALU该进行哪种操作
     wire ALU_OP_ADD   = ADDI | LW;
-    wire ALU_OP_OR    = ORI;
+    wire ALU_OP_OR    = ORI | OR;
     wire ALU_OP_SLL   = SLLI;
     wire ALU_OP_EQ    = BEQ;
     wire ALU_OP_NE    = BNE;
@@ -81,14 +84,19 @@ module Controller (
     wire ALU_OP_REMU = REMU;
     wire ALU_OP_SLT = SLT | SLTI;
     wire ALU_OP_SLTU = SLTU | SLTIU;
+    wire ALU_OP_AND = AND | ANDI;
+    wire ALU_OP_LT = BLT;
+    wire ALU_OP_GE = BGE;
+    wire ALU_OP_LTU = BLTU;
+    wire ALU_OP_GEU = BGEU;
     
     // alua_sel
-    wire ALU_A_SEL_RS1 = ADDI | ORI | SLLI | LW | BEQ | BNE | JAL | MUL | MULH | MULHU | DIV | DIVU | REM | REMU | SLT | SLTI | SLTU | SLTIU ;
+    wire ALU_A_SEL_RS1 = ADDI | ORI | SLLI | LW | BEQ | BNE | JAL | MUL | MULH | MULHU | DIV | DIVU | REM | REMU | SLT | SLTI | SLTU | SLTIU | AND | ANDI | OR;
     wire ALU_A_SEL_PC  = 1'b0;
                         
     // alub_sel
-    wire ALU_B_SEL_RS2 = BEQ | BNE | MUL | MULH | MULHU | DIV | DIVU | REM | REMU | SLT | SLTU;
-    wire ALU_B_SEL_EXT = ADDI | ORI | SLLI | LW | JAL | SLTI | SLTIU;
+    wire ALU_B_SEL_RS2 = BEQ | BNE | MUL | MULH | MULHU | DIV | DIVU | REM | REMU | SLT | SLTU | AND | OR;
+    wire ALU_B_SEL_EXT = ADDI | ORI | SLLI | LW | JAL | SLTI | SLTIU | ANDI;
         
     // ram_r_op
     wire RAM_EXT_B  = 1'b0;
@@ -131,7 +139,13 @@ module Controller (
                   | {5{ALU_OP_REM}} & `ALU_REM
                   | {5{ALU_OP_REMU}} & `ALU_REMU
                   | {5{ALU_OP_SLT}} & `ALU_SLT
-                  | {5{ALU_OP_SLTU}} & `ALU_SLTU;
+                  | {5{ALU_OP_SLTU}} & `ALU_SLTU
+                  | {5{ALU_OP_AND}} & `ALU_AND
+                  | {5{ALU_OP_LT}} & `ALU_LT
+                  | {5{ALU_OP_GE}} & `ALU_GE
+                  | {5{ALU_OP_LTU}} & `ALU_LTU
+                  | {5{ALU_OP_GEU}} & `ALU_GEU;
+
 
     assign alua_sel = ALU_A_SEL_PC & `ALU_A_PC | ALU_A_SEL_RS1 & `ALU_A_RS1;
 
