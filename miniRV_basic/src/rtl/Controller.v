@@ -39,15 +39,20 @@ module Controller (
     wire SLTI = (opcode == 7'b0010011) && (funct3 == 3'b010);
     wire SLTU = (opcode == 7'b0110011) && (funct3 == 3'b011) && (funct7 == 7'b0000000);
     wire SLTIU = (opcode == 7'b0010011) && (funct3 == 3'b011);
+    wire BLT = (opcode == 7'b1100011) && (funct3 == 3'b100);
+    wire BGE = (opcode == 7'b1100011) && (funct3 == 3'b101);
+    wire BLTU = (opcode == 7'b1100011) && (funct3 == 3'b110);
+    wire BGEU = (opcode == 7'b1100011) && (funct3 == 3'b111);
+
 
  
     // npc_op，表示下一个指令是PC+4还是跳转
-    wire NPC_OP_BRA = BEQ | BNE ;
+    wire NPC_OP_BRA = BEQ | BNE | BLT | BGE | BLTU | BGEU;
     wire NPC_OP_JMP = JAL;
     wire NPC_OP_PC4 = !NPC_OP_BRA & !NPC_OP_JMP;
     
     // rf_we，表示是否使用立即数
-    wire RF_OP_WE = ADDI | ORI | SLLI | LW | LUI | JAL | SLTI | SLTIU;
+    wire RF_OP_WE = ADDI | ORI | SLLI | LW | LUI | JAL | SLTI | SLTIU | BLT | BGE | BLTU | BGEU;
     
     // rf_wsel，表示写回的数据来自哪里
     wire WB_OP_ALU = ADDI | ORI | SLLI| MUL | MULH | MULHU | DIV | DIVU | REM | REMU | SLT | SLTI | SLTU | SLTIU;
@@ -57,7 +62,7 @@ module Controller (
     
     // sext_op，表示该用哪种立即数
     wire EXT_OP_I = ADDI | ORI | SLLI | LW | SLTI | SLTIU;
-    wire EXT_OP_B = BEQ | BNE;
+    wire EXT_OP_B = BEQ | BNE | BLT | BGE | BLTU | BGEU;
     wire EXT_OP_U = LUI;
     wire EXT_OP_J = JAL;
     
@@ -74,10 +79,11 @@ module Controller (
     wire ALU_OP_DIVU = DIVU;
     wire ALU_OP_REM = REM;
     wire ALU_OP_REMU = REMU;
-    wire ALU_OP_SLT = SLT;
+    wire ALU_OP_SLT = SLT | SLTI;
+    wire ALU_OP_SLTU = SLTU | SLTIU;
     
     // alua_sel
-    wire ALU_A_SEL_RS1 = ADDI | ORI | SLLI | LW | BEQ | BNE | JAL | MUL | MULH | MULHU | DIV | DIVU | REM | REMU | SLT | SLTI | SLTU | SLTIU;
+    wire ALU_A_SEL_RS1 = ADDI | ORI | SLLI | LW | BEQ | BNE | JAL | MUL | MULH | MULHU | DIV | DIVU | REM | REMU | SLT | SLTI | SLTU | SLTIU ;
     wire ALU_A_SEL_PC  = 1'b0;
                         
     // alub_sel
@@ -123,7 +129,9 @@ module Controller (
                   | {5{ALU_OP_DIV}} & `ALU_DIV
                   | {5{ALU_OP_DIVU}} & `ALU_DIVU
                   | {5{ALU_OP_REM}} & `ALU_REM
-                  | {5{ALU_OP_REMU}} & `ALU_REMU;
+                  | {5{ALU_OP_REMU}} & `ALU_REMU
+                  | {5{ALU_OP_SLT}} & `ALU_SLT
+                  | {5{ALU_OP_SLTU}} & `ALU_SLTU;
 
     assign alua_sel = ALU_A_SEL_PC & `ALU_A_PC | ALU_A_SEL_RS1 & `ALU_A_RS1;
 

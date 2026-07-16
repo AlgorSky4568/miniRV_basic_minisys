@@ -36,9 +36,8 @@ module ALU (
             `ALU_REM:c = div_rem;
             `ALU_REMU:c = divu_rem;
             `ALU_SLT: c = ($signed(a) < $signed(b));
-            `ALU_SLTI:c = (a<b);
-            `ALU_SLTI:c = ($signed(a) < $signed(b));
-            `ALU_SLTIU:c = (a<b);
+            `ALU_SLTU:c = (a<b);
+            `ALU_AND:c = a & b;
             default   : c = 32'h0;
         endcase
     end
@@ -47,6 +46,10 @@ module ALU (
         case (op)
             `ALU_EQ : br = a == b;
             `ALU_NE : br = a != b;
+            `ALU_LT: br = ($signed(a) < $signed(b));
+            `ALU_GE: br = ($signed(a) >= $signed(b));
+            `ALU_LTU:br = (a<b);
+            `ALU_GEU:br = (a>=b);
             default : br = 1'b0;
         endcase
     end
