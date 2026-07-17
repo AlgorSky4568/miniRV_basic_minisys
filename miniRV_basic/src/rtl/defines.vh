@@ -7,31 +7,36 @@
 `define PC_INIT_VAL 32'h0
 
 `define ALU_ADD     5'h00
+`define ALU_SUB     5'h01
+`define ALU_AND     5'h02    // B组: and, andi
 `define ALU_OR      5'h03
+`define ALU_XOR     5'h04
 `define ALU_SLL     5'h05
+`define ALU_SRL     5'h06
+`define ALU_SRA     5'h07
 `define ALU_EQ      5'h08
 `define ALU_NE      5'h09
-`define ALU_MUL     5'h0a
-`define ALU_MULH    5'h0b
-`define ALU_MULHU   5'h0c
-`define ALU_DIV   5'h0d
-`define ALU_DIVU   5'h0e
-`define ALU_REM   5'h0f
-`define ALU_REMU   5'h10
-`define ALU_SLT   5'h11
-`define ALU_SLTU   5'h12
-`define ALU_AND 5'h13
-`define ALU_LT 5'h14
-`define ALU_GE 5'h15
-`define ALU_LTU 5'h16
-`define ALU_GEU 5'h17
+`define ALU_LT      5'h0A    // B组: blt
+`define ALU_LTU     5'h0B    // B组: bltu
+`define ALU_GE      5'h0C    // B组: bge
+`define ALU_GEU     5'h0D    // B组: bgeu
+`define ALU_SLT     5'h0E    // B组: slt, slti
+`define ALU_SLTU    5'h0F    // B组: sltu, sltiu
+`define ALU_MUL     5'h10    // B组: mul
+`define ALU_MULH    5'h11    // B组: mulh
+`define ALU_MULHU   5'h12    // B组: mulhu
+`define ALU_DIV     5'h13    // B组: div
+`define ALU_DIVU    5'h14    // B组: divu
+`define ALU_REM     5'h15    // B组: rem
+`define ALU_REMU    5'h16    // B组: remu
 
-    
 `define NPC_PC4     2'b00
+`define NPC_JALR    2'b01
 `define NPC_BRA     2'b10
 `define NPC_JMP     2'b11
-    
+
 `define EXT_I       3'b000
+`define EXT_S       3'b001
 `define EXT_B       3'b010
 `define EXT_U       3'b011
 `define EXT_J       3'b100
@@ -43,7 +48,7 @@
 
 `define ALU_A_RS1   1'b0
 `define ALU_A_PC    1'b1
-    
+
 `define ALU_B_RS2   1'b0
 `define ALU_B_EXT   1'b1
 
@@ -53,7 +58,7 @@
 `define RAM_EXT_BU  3'b011
 `define RAM_EXT_H   3'b100
 `define RAM_EXT_HU  3'b101
-    
+
 `define RAM_WE_N    4'b0000
 `define RAM_WE_B    4'b0001
 `define RAM_WE_H    4'b0011

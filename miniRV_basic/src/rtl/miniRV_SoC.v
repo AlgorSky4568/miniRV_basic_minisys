@@ -1,7 +1,7 @@
 `timescale 1ns / 1ps
 
 `include "defines.vh"
-//test
+
 module miniRV_SoC(
     input  wire         fpga_clk,
     input  wire         fpga_rst,

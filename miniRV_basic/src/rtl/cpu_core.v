@@ -6,13 +6,13 @@ module cpu_core(
     input  wire         cpu_rst,
     input  wire         cpu_clk,
 
-    // Instruction Fetch Interface
+    // Instruction Fetch Interface 取址相关
     output wire         ifetch_req   /* verilator public */ ,
     output wire [31:0]  ifetch_addr  /* verilator public */ ,
     input  wire         ifetch_valid /* verilator public */ ,
     input  wire [31:0]  ifetch_inst,
     
-    // Data Access Interface
+    // Data Access Interface    输出：读使能，读地址，写使能，写地址 输入：读有效，读数据，写反应
     output reg  [ 3:0]  daccess_ren,
     output reg  [31:0]  daccess_addr,
     input  wire         daccess_rvalid,
@@ -75,26 +75,33 @@ module cpu_core(
     wire        ld_st_done;         // 访存完成的标志位信号
 
     wire        inst_finished;      // 指令执行完成的标志位信号
-    reg         inst_finished_r;
+    reg         inst_finished_r;    // 复位：0，没复位：随便
 
     /***************************** IF *****************************/
-    reg rst_r;
+    reg rst_r;  // 取cpu_rst下降沿
     wire first_req = rst_r & !cpu_rst;
     always @(posedge cpu_clk) rst_r <= cpu_rst;
 
     // 复位信号发生边沿变化时首次取指; 当前指令执行完毕后取下一条指令
     assign ifetch_req  = first_req | inst_finished_r;
     assign ifetch_addr = pc;
-
+    
+    // npc计算器
+    // 看输入的两位opcode，取决最后输出是:
+    // 一般情况:PC+4
+    // B型指令:PC+4(条件成立)或者PC+offset（条件不成立）
+    // J型：PC+offset
     NPC U_NPC (
         .op         (npc_op),
         .pc         (pc),
         .offset     (ext),
         .br         (br),
+        .alu_c      (alu_c),
         .npc        (npc),
         .pc4        (pc4)
     );
-
+    
+    // 完成inst_fetch之后pc变成npc
     PC U_PC (
         .clk        (cpu_clk),
         .rst        (cpu_rst),
@@ -107,7 +114,8 @@ module cpu_core(
     // 按照约定的时序，ifetch_inst只在ifetch_valid有效时有效，且它们仅有效1个时钟.
     // 此处是为了避免ifetch_valid撤销后，ifetch_inst发生变化从而导致指令执行出错.
     assign inst = ifetch_valid ? ifetch_inst : 32'h13 /* NOP */ ;
-
+    
+    
     Controller U_CU (
         // input
         .opcode         (inst[6:0]),
@@ -126,7 +134,9 @@ module cpu_core(
         .rf_we          (rf_we),
         .rf_wsel        (rf_wsel)
     );
-
+    
+    
+    // 32个32位寄存器
     RF U_RF (
         .clk        (cpu_clk),
         .rR1        (inst[19:15]),
@@ -137,7 +147,8 @@ module cpu_core(
         .wR         (rf_wR),
         .wD         (rf_wD)
     );
-
+    
+    // 立即数生成器
     SEXT U_SEXT (
         .op         (sext_op),
         .imm        (inst[31:7]),
@@ -189,7 +200,7 @@ module cpu_core(
         .da_addr    (da_addr),
 
         .ram_wop    (ram_wop),
-        .ram_wdata  (32'h0),
+        .ram_wdata  (rf_rd2),
         .da_wen     (da_wen),
         .da_wdata   (da_wdata)
     );

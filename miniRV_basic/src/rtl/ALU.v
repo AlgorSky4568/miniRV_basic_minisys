@@ -8,7 +8,7 @@ module ALU (
     input  wire [ 4:0]  op,
     input  wire [31:0]  a,
     input  wire [31:0]  b,
-    
+
     output reg  [31:0]  c,
     output reg          br,
     output wire         busy
@@ -24,33 +24,37 @@ module ALU (
     reg  [ 4:0] op_r;
 
     always @(*) begin
-        case (op_r != 4'h0 ? op_r : op)
+        case (op_r != 5'h0 ? op_r : op)
             `ALU_ADD  : c = a + b;
+            `ALU_SUB  : c = a - b;
             `ALU_OR   : c = a | b;
+            `ALU_XOR  : c = a ^ b;
             `ALU_SLL  : c = a << b[4:0];
+            `ALU_SRL  : c = a >> b[4:0];
+            `ALU_SRA  : c = $signed(a) >>> b[4:0];
+            `ALU_AND  : c = a & b;
+            `ALU_SLT  : c = ($signed(a) < $signed(b)) ? 32'd1 : 32'd0;
+            `ALU_SLTU : c = (a < b) ? 32'd1 : 32'd0;
             `ALU_MUL  : c = mul_res[31:0];
             `ALU_MULH : c = mul_res[63:32];
             `ALU_MULHU: c = mulu_res[63:32];
-            `ALU_DIV: c = div_quo;
-            `ALU_DIVU: c = divu_quo;
-            `ALU_REM:c = div_rem;
-            `ALU_REMU:c = divu_rem;
-            `ALU_SLT: c = ($signed(a) < $signed(b));
-            `ALU_SLTU:c = (a<b);
-            `ALU_AND:c = a & b;
+            `ALU_DIV  : c = div_quo;
+            `ALU_DIVU : c = divu_quo;
+            `ALU_REM  : c = div_rem;
+            `ALU_REMU : c = divu_rem;
             default   : c = 32'h0;
         endcase
     end
 
     always @(*) begin
         case (op)
-            `ALU_EQ : br = a == b;
-            `ALU_NE : br = a != b;
-            `ALU_LT: br = ($signed(a) < $signed(b));
-            `ALU_GE: br = ($signed(a) >= $signed(b));
-            `ALU_LTU:br = (a<b);
-            `ALU_GEU:br = (a>=b);
-            default : br = 1'b0;
+            `ALU_EQ  : br = a == b;
+            `ALU_NE  : br = a != b;
+            `ALU_LT  : br = $signed(a) < $signed(b);
+            `ALU_LTU : br = a < b;
+            `ALU_GE  : br = $signed(a) >= $signed(b);
+            `ALU_GEU : br = a >= b;
+            default  : br = 1'b0;
         endcase
     end
 
