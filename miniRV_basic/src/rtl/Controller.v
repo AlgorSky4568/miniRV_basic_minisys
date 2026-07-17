@@ -55,7 +55,11 @@ module Controller (
     wire NPC_OP_PC4 = !NPC_OP_BRA & !NPC_OP_JMP;
     
     // rf_we，表示是否写回
-    wire RF_OP_WE = ADDI | ORI | SLLI | LW | LUI | JAL | SLTI | SLTIU | BLT | BGE | BLTU | BGEU | ANDI;
+    wire RF_OP_WE = ADDI | ORI | SLLI | LW | LUI | JAL
+                   | SLT | SLTU | AND | OR                    // B组 R型 ALU
+                   | SLTI | SLTIU | ANDI                       // B组 I型 ALU
+                   | MUL | MULH | MULHU                        // 乘法
+                   | DIV | DIVU | REM | REMU;                  // 除法
     
     // rf_wsel，表示写回的数据来自哪里
     wire WB_OP_ALU = ADDI | ORI | SLLI| MUL | MULH | MULHU | DIV | DIVU | REM | REMU | SLT | SLTI | SLTU | SLTIU | AND | ANDI | OR;
@@ -91,11 +95,16 @@ module Controller (
     wire ALU_OP_GEU = BGEU;
     
     // alua_sel
-    wire ALU_A_SEL_RS1 = ADDI | ORI | SLLI | LW | BEQ | BNE | JAL | MUL | MULH | MULHU | DIV | DIVU | REM | REMU | SLT | SLTI | SLTU | SLTIU | AND | ANDI | OR;
+    wire ALU_A_SEL_RS1 = ADDI | ORI | SLLI | LW | BEQ | BNE | JAL
+                        | BLT | BGE | BLTU | BGEU
+                        | MUL | MULH | MULHU | DIV | DIVU | REM | REMU
+                        | SLT | SLTI | SLTU | SLTIU | AND | ANDI | OR;
     wire ALU_A_SEL_PC  = 1'b0;
                         
     // alub_sel
-    wire ALU_B_SEL_RS2 = BEQ | BNE | MUL | MULH | MULHU | DIV | DIVU | REM | REMU | SLT | SLTU | AND | OR;
+    wire ALU_B_SEL_RS2 = BEQ | BNE | BLT | BGE | BLTU | BGEU
+                        | MUL | MULH | MULHU | DIV | DIVU | REM | REMU
+                        | SLT | SLTU | AND | OR;
     wire ALU_B_SEL_EXT = ADDI | ORI | SLLI | LW | JAL | SLTI | SLTIU | ANDI;
         
     // ram_r_op

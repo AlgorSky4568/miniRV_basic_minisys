@@ -64,7 +64,7 @@ module ALU (
         if (mul_flag | mulu_flag | div_flag | divu_flag)
             op_r <= op;
         else if (!busy)
-            op_r <= 4'h0;
+            op_r <= 5'h0;
     end
 
     multiplier #(32) U_mul (
