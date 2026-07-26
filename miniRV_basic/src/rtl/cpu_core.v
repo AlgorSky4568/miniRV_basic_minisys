@@ -83,7 +83,7 @@ module cpu_core(
     always @(posedge cpu_clk) rst_r <= cpu_rst;
 
     // 复位信号发生边沿变化时首次取指; 当前指令执行完毕后取下一条指令
-    assign ifetch_req  = first_req | inst_finished_r;
+    assign ifetch_req  = first_req | ifetch_valid;
     assign ifetch_addr = pc;
     
     // npc计算器
@@ -114,7 +114,15 @@ module cpu_core(
     // 按照约定的时序，ifetch_inst只在ifetch_valid有效时有效，且它们仅有效1个时钟.
     // 此处是为了避免ifetch_valid撤销后，ifetch_inst发生变化从而导致指令执行出错.
     assign inst = ifetch_valid ? ifetch_inst : 32'h13 /* NOP */ ;
-    
+
+    reg[31:0] id_pc;
+    reg[31:0] id_inst;
+
+    always@(posedge cpu_clk or posedge cpu_rst)begin
+      if(cpu_rst) id_pc <= 32'b0;
+      else id_pc <= pc4;
+    end
+
     
     Controller U_CU (
         // input
@@ -177,13 +185,44 @@ module cpu_core(
     end
 
     /***************************** EX *****************************/
-    assign alu_a = alua_sel ? pc  : rf_rd1;
-    assign alu_b = alub_sel ? ext : rf_rd2;
+    reg[31:0] ex_rd1;
+    reg[31:0] ex_rd2;
+    reg[31:0] ex_pc;
+    reg[31:0] ex_ext;
+    reg ex_alu_a_sel,ex_alu_b_sel;
+    reg[4:0] ex_alu_op;
+    reg[2:0] ex_ram_rop;
+
+    always@(posedge cpu_clk or posedge cpu_rst)begin
+        if(cpu_rst)begin
+            ex_rd1 <= 32'b0;
+            ex_rd2 <= 32'b0;
+            ex_pc <= 32'b0;
+            ex_ext <= 32'b0;
+            ex_alu_a_sel <= 1'b0;
+            ex_alu_b_sel <= 1'b0;
+            ex_alu_op <= 5'b0;
+            ex_ram_rop <= 3'b0;
+        end
+        else begin
+            ex_rd1 <= rf_rd1;
+            ex_rd2 <= rf_rd2;
+            ex_pc <= id_pc;
+            ex_ext <= ext;
+            ex_alu_a_sel <= alua_sel;
+            ex_alu_b_sel <= alub_sel;
+            ex_alu_op <= alu_op;
+            ex_ram_rop <= ram_rop;
+        end
+    end
+
+    assign alu_a = ex_alu_a_sel ? ex_pc  : ex_rd1;
+    assign alu_b = ex_alu_b_sel ? ex_ext : ex_rd2;
 
     ALU U_ALU (
         .rst        (cpu_rst),
         .clk        (cpu_clk),
-        .op         (alu_op),
+        .op         (ex_alu_op),
         .a          (alu_a),
         .b          (alu_b),
         .br         (br),
@@ -192,10 +231,12 @@ module cpu_core(
     );
 
     /***************************** MEM *****************************/
+
+
     MREQ U_MEM_REQ (
         .ram_addr   (alu_c),
 
-        .ram_rop    (ram_rop),
+        .ram_rop    (ex_ram_rop),
         .da_ren     (da_ren),
         .da_addr    (da_addr),
 
