@@ -192,6 +192,10 @@ module cpu_core(
     reg ex_alu_a_sel,ex_alu_b_sel;
     reg[4:0] ex_alu_op;
     reg[2:0] ex_ram_rop;
+    reg [1:0] ex_rf_wel;
+    reg ex_rf_we;
+    reg [4:0] ex_rf_wR;
+
 
     always@(posedge cpu_clk or posedge cpu_rst)begin
         if(cpu_rst)begin
@@ -203,6 +207,9 @@ module cpu_core(
             ex_alu_b_sel <= 1'b0;
             ex_alu_op <= 5'b0;
             ex_ram_rop <= 3'b0;
+            ex_rf_wel <= 2'b0;
+            ex_rf_we <= 1'b0;
+            ex_rf_wR <= 5'b0;
         end
         else begin
             ex_rd1 <= rf_rd1;
@@ -213,6 +220,9 @@ module cpu_core(
             ex_alu_b_sel <= alub_sel;
             ex_alu_op <= alu_op;
             ex_ram_rop <= ram_rop;
+            ex_rf_wel <= rf_wsel;
+            ex_rf_we <= rf_we;
+            ex_rf_wR <= inst[11:7];
         end
     end
 
@@ -274,12 +284,12 @@ module cpu_core(
     /***************************** WB *****************************/
     assign rf_we1 = ld_st_flag   & daccess_rvalid |                 // Load指令在读取到数据时写回
                     mul_div_flag & !mul_div_busy  |                 // 乘除法指令在运算完成时写回
-                    ifetch_valid & rf_we & !is_ld_st & !is_mul_div; // 其他指令在取到指令时写回
+                    ifetch_valid & ex_rf_we & !is_ld_st & !is_mul_div; // 其他指令在取到指令时写回
 
-    assign rf_wR  = ld_st_flag | mul_div_flag ? rf_wR_r : inst[11:7];
+    assign rf_wR  = ld_st_flag | mul_div_flag ? rf_wR_r : ex_rf_wR;
 
     always @(*) begin
-        casex ({ld_st_flag, rf_wsel})
+        casex ({ld_st_flag, ex_rf_wel})
             {1'b0, `WB_ALU}: rf_wD = alu_c;
             {1'b0, `WB_PC4}: rf_wD = pc4;
             {1'b0, `WB_EXT}: rf_wD = ext;
