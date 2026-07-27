@@ -1,5 +1,5 @@
 verilog xil_defaultlib  \
-"../../../../src/rtl/ip/IROM/sim/IROM.v" \
+"../../../../miniRV.gen/IROM/ip/IROM/sim/IROM.v" \
 
 verilog xil_defaultlib "glbl.v"
 

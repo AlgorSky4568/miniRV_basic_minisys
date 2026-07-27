@@ -25,7 +25,7 @@ else
 fi
 export LD_LIBRARY_PATH
 
-HD_PWD='E:/Downloads/miniRV_basic_minisys/miniRV_basic/miniRV.runs/DRAM_synth_1'
+HD_PWD='E:/Downloads/CPU_pipline/miniRV_basic/miniRV.runs/DRAM_synth_1'
 cd "$HD_PWD"
 
 HD_LOG=runme.log

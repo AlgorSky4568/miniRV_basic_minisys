@@ -5,11 +5,11 @@ Running: D:/vivado/Vivado/2024.1/bin/unwrapped/win64.o/xelab.exe --incr --debug 
 Using 2 slave threads.
 Starting static elaboration
 Pass Through NonSizing Optimizer
-WARNING: [VRFC 10-3091] actual bit length 64 differs from formal bit length 66 for port 'z' [E:/Downloads/miniRV_basic_minisys/miniRV_basic/src/rtl/ALU.v:73]
-WARNING: [VRFC 10-3091] actual bit length 32 differs from formal bit length 33 for port 'z' [E:/Downloads/miniRV_basic_minisys/miniRV_basic/src/rtl/ALU.v:94]
-WARNING: [VRFC 10-3091] actual bit length 32 differs from formal bit length 33 for port 'r' [E:/Downloads/miniRV_basic_minisys/miniRV_basic/src/rtl/ALU.v:95]
-WARNING: [VRFC 10-3091] actual bit length 30 differs from formal bit length 14 for port 'addra' [E:/Downloads/miniRV_basic_minisys/miniRV_basic/src/rtl/Inst_ROM.v:21]
-WARNING: [VRFC 10-3091] actual bit length 30 differs from formal bit length 15 for port 'addra' [E:/Downloads/miniRV_basic_minisys/miniRV_basic/src/rtl/Data_RAM.v:25]
+WARNING: [VRFC 10-3091] actual bit length 64 differs from formal bit length 66 for port 'z' [E:/Downloads/CPU_pipline/miniRV_basic/src/rtl/ALU.v:90]
+WARNING: [VRFC 10-3091] actual bit length 32 differs from formal bit length 33 for port 'z' [E:/Downloads/CPU_pipline/miniRV_basic/src/rtl/ALU.v:111]
+WARNING: [VRFC 10-3091] actual bit length 32 differs from formal bit length 33 for port 'r' [E:/Downloads/CPU_pipline/miniRV_basic/src/rtl/ALU.v:112]
+WARNING: [VRFC 10-3091] actual bit length 30 differs from formal bit length 14 for port 'addra' [E:/Downloads/CPU_pipline/miniRV_basic/src/rtl/Inst_ROM.v:21]
+WARNING: [VRFC 10-3091] actual bit length 30 differs from formal bit length 15 for port 'addra' [E:/Downloads/CPU_pipline/miniRV_basic/src/rtl/Data_RAM.v:25]
 Completed static elaboration
 Starting simulation data flow analysis
 Completed simulation data flow analysis

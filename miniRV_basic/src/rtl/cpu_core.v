@@ -38,6 +38,7 @@ module cpu_core(
     wire [ 2:0] ram_rop;
     reg  [ 2:0] ram_rop_r;
     wire [ 3:0] ram_wop;
+    reg  [ 3:0] ex_ram_wop;        // 流水线化的ram_wop
     wire        is_mul;
     wire        is_div;
     wire        is_mul_div;
@@ -46,7 +47,6 @@ module cpu_core(
     // Register File
     wire [31:0] rf_rd1;
     wire [31:0] rf_rd2;
-    wire [31:0] rf_rd3;
     wire        rf_we;
     wire        rf_we1;
     reg  [ 4:0] rf_wR_r;
@@ -77,12 +77,19 @@ module cpu_core(
     wire        inst_finished;      // 指令执行完成的标志位信号
     reg         inst_finished_r;    // 复位：0，没复位：随便
 
+    // ============= ID阶段寄存器地址（用于RF读取和前递） =============
+    wire [4:0]  id_rs1;            // ID阶段读寄存器1地址
+    wire [4:0]  id_rs2;            // ID阶段读寄存器2地址
+
+    assign id_rs1 = inst[19:15];
+    assign id_rs2 = inst[24:20];
+
     /***************************** IF *****************************/
     reg rst_r;  // 取cpu_rst下降沿
     wire first_req = rst_r & !cpu_rst;
     always @(posedge cpu_clk) rst_r <= cpu_rst;
 
-    // 复位信号发生边沿变化时首次取指; 当前指令执行完毕后取下一条指令
+    // 复位信号发生边沿变化时首次取指; 取指完成后取下一条指令
     assign ifetch_req  = first_req | ifetch_valid;
     assign ifetch_addr = pc;
     
@@ -119,8 +126,14 @@ module cpu_core(
     reg[31:0] id_inst;
 
     always@(posedge cpu_clk or posedge cpu_rst)begin
-      if(cpu_rst) id_pc <= 32'b0;
-      else id_pc <= pc4;
+      if(cpu_rst) begin
+        id_pc <= 32'b0;
+        id_inst <= 32'b0;
+      end
+      else begin
+        id_pc <= pc4;
+        id_inst <= inst;
+      end
     end
 
     
@@ -147,8 +160,8 @@ module cpu_core(
     // 32个32位寄存器
     RF U_RF (
         .clk        (cpu_clk),
-        .rR1        (inst[19:15]),
-        .rR2        (inst[24:20]),
+        .rR1        (id_rs1),
+        .rR2        (id_rs2),
         .rD1        (rf_rd1),
         .rD2        (rf_rd2),
         .we         (rf_we1),
@@ -196,7 +209,7 @@ module cpu_core(
     reg ex_rf_we;
     reg [4:0] ex_rf_wR;
 
-
+    // EX流水线寄存器：使用前递后的数据（fwd_rd1/fwd_rd2）
     always@(posedge cpu_clk or posedge cpu_rst)begin
         if(cpu_rst)begin
             ex_rd1 <= 32'b0;
@@ -207,6 +220,7 @@ module cpu_core(
             ex_alu_b_sel <= 1'b0;
             ex_alu_op <= 5'b0;
             ex_ram_rop <= 3'b0;
+            ex_ram_wop <= 4'b0;
             ex_rf_wel <= 2'b0;
             ex_rf_we <= 1'b0;
             ex_rf_wR <= 5'b0;
@@ -220,6 +234,7 @@ module cpu_core(
             ex_alu_b_sel <= alub_sel;
             ex_alu_op <= alu_op;
             ex_ram_rop <= ram_rop;
+            ex_ram_wop <= ram_wop;      // 流水线化ram_wop
             ex_rf_wel <= rf_wsel;
             ex_rf_we <= rf_we;
             ex_rf_wR <= inst[11:7];
@@ -250,8 +265,8 @@ module cpu_core(
         .da_ren     (da_ren),
         .da_addr    (da_addr),
 
-        .ram_wop    (ram_wop),
-        .ram_wdata  (rf_rd2),
+        .ram_wop    (ex_ram_wop),       // 使用流水线化后的ram_wop
+        .ram_wdata  (ex_rd2),           // 使用流水线化后的rs2数据
         .da_wen     (da_wen),
         .da_wdata   (da_wdata)
     );
@@ -282,30 +297,42 @@ module cpu_core(
     assign ld_st_done = daccess_rvalid | daccess_wresp;
 
     /***************************** WB *****************************/
-    assign rf_we1 = ld_st_flag   & daccess_rvalid |                 // Load指令在读取到数据时写回
-                    mul_div_flag & !mul_div_busy  |                 // 乘除法指令在运算完成时写回
-                    ifetch_valid & ex_rf_we & !is_ld_st & !is_mul_div; // 其他指令在取到指令时写回
+    // 写回使能信号：
+    // - Load指令：ld_st_flag置位且daccess_rvalid有效时写回
+    // - 乘除法指令：mul_div_flag置位且运算结束时写回
+    // - 其他单周期指令：ifetch_valid有效且ex_rf_we置位时写回
+    //   注意：此处不再依赖ID阶段的is_ld_st/is_mul_div，避免多周期指令阻塞前一条指令的写回
+    assign rf_we1 = ld_st_flag   & daccess_rvalid |
+                    mul_div_flag & !mul_div_busy  |
+                    ifetch_valid & ex_rf_we;
 
     assign rf_wR  = ld_st_flag | mul_div_flag ? rf_wR_r : ex_rf_wR;
 
+    // 写回数据选择：
+    // - WB_ALU: ALU计算结果（使用ex_pc+4计算返回地址，使用ex_ext作为立即数）
+    // - WB_RAM: 访存读取数据（由ld_st_flag控制）
     always @(*) begin
         casex ({ld_st_flag, ex_rf_wel})
             {1'b0, `WB_ALU}: rf_wD = alu_c;
-            {1'b0, `WB_PC4}: rf_wD = pc4;
-            {1'b0, `WB_EXT}: rf_wD = ext;
+            {1'b0, `WB_PC4}: rf_wD = ex_pc + 32'd4;     // 使用流水线化的PC+4，而非当前pc4
+            {1'b0, `WB_EXT}: rf_wD = ex_ext;             // 使用流水线化的立即数，而非当前ext
             {1'b1, 2'b??  }: rf_wD = ram_ext;
             default        : rf_wD = 32'h0;
         endcase
     end
 
-    assign inst_finished = ld_st_flag   & ld_st_done    |           // 访存指令在读写完毕时执行完成
-                           mul_div_flag & !mul_div_busy |           // 乘除法指令在运算完毕时完成
-                           ifetch_valid & !is_ld_st & !is_mul_div;  // 其他指令单周期完成（即取到指令的同时执行完成）
+    // 指令完成信号：
+    // - 访存指令：ld_st_flag置位且读写完成
+    // - 乘除法指令：mul_div_flag置位且运算完成
+    // - 单周期指令：ifetch_valid有效且当前ID阶段不是多周期指令（避免多周期指令在标志位置位前被误认为完成）
+    assign inst_finished = ld_st_flag   & ld_st_done    |
+                           mul_div_flag & !mul_div_busy |
+                           ifetch_valid & !is_ld_st & !is_mul_div;
+
 
     always @(posedge cpu_clk or posedge cpu_rst) begin
         inst_finished_r <= cpu_rst ? 1'b0 : inst_finished;
     end
-
 
 
     /********************* Your CPU ends here *********************/

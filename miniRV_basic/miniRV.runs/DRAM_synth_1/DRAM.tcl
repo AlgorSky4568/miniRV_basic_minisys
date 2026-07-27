@@ -4,7 +4,7 @@
 
 set TIME_start [clock seconds] 
 namespace eval ::optrace {
-  variable script "E:/Downloads/miniRV_basic_minisys/miniRV_basic/miniRV.runs/DRAM_synth_1/DRAM.tcl"
+  variable script "E:/Downloads/CPU_pipline/miniRV_basic/miniRV.runs/DRAM_synth_1/DRAM.tcl"
   variable category "vivado_synth"
 }
 
@@ -65,17 +65,17 @@ set_param project.singleFileAddWarning.threshold 0
 set_param project.compositeFile.enableAutoGeneration 0
 set_param synth.vivado.isSynthRun true
 set_msg_config -source 4 -id {IP_Flow 19-2162} -severity warning -new_severity info
-set_property webtalk.parent_dir E:/Downloads/miniRV_basic_minisys/miniRV_basic/miniRV.cache/wt [current_project]
-set_property parent.project_path E:/Downloads/miniRV_basic_minisys/miniRV_basic/miniRV.xpr [current_project]
+set_property webtalk.parent_dir E:/Downloads/CPU_pipline/miniRV_basic/miniRV.cache/wt [current_project]
+set_property parent.project_path E:/Downloads/CPU_pipline/miniRV_basic/miniRV.xpr [current_project]
 set_property XPM_LIBRARIES {XPM_CDC XPM_MEMORY} [current_project]
 set_property default_lib xil_defaultlib [current_project]
 set_property target_language Verilog [current_project]
-set_property ip_output_repo e:/Downloads/miniRV_basic_minisys/miniRV_basic/miniRV.cache/ip [current_project]
+set_property ip_output_repo e:/Downloads/CPU_pipline/miniRV_basic/miniRV.cache/ip [current_project]
 set_property ip_cache_permissions {read write} [current_project]
 OPTRACE "Creating in-memory project" END { }
 OPTRACE "Adding files" START { }
-read_ip -quiet E:/Downloads/miniRV_basic_minisys/miniRV_basic/src/rtl/ip/DRAM/DRAM.xci
-set_property used_in_implementation false [get_files -all e:/Downloads/miniRV_basic_minisys/miniRV_basic/src/rtl/ip/DRAM/DRAM_ooc.xdc]
+read_ip -quiet E:/Downloads/CPU_pipline/miniRV_basic/src/rtl/ip/DRAM/DRAM.xci
+set_property used_in_implementation false [get_files -all e:/Downloads/CPU_pipline/miniRV_basic/src/rtl/ip/DRAM/DRAM_ooc.xdc]
 
 OPTRACE "Adding files" END { }
 # Mark all dcp files as not used in implementation to prevent them from being
@@ -91,7 +91,7 @@ set_property used_in_implementation false [get_files dont_touch.xdc]
 set_param ips.enableIPCacheLiteLoad 1
 OPTRACE "Configure IP Cache" START { }
 
-set cacheID [config_ip_cache -export -no_bom  -dir E:/Downloads/miniRV_basic_minisys/miniRV_basic/miniRV.runs/DRAM_synth_1 -new_name DRAM -ip [get_ips DRAM]]
+set cacheID [config_ip_cache -export -no_bom  -dir E:/Downloads/CPU_pipline/miniRV_basic/miniRV.runs/DRAM_synth_1 -new_name DRAM -ip [get_ips DRAM]]
 
 OPTRACE "Configure IP Cache" END { }
 if { $cacheID == "" } {
@@ -146,32 +146,32 @@ generate_parallel_reports -reports { "report_utilization -file DRAM_utilization_
 OPTRACE "synth reports" END { }
 
 if { [catch {
-  file copy -force E:/Downloads/miniRV_basic_minisys/miniRV_basic/miniRV.runs/DRAM_synth_1/DRAM.dcp e:/Downloads/miniRV_basic_minisys/miniRV_basic/src/rtl/ip/DRAM/DRAM.dcp
+  file copy -force E:/Downloads/CPU_pipline/miniRV_basic/miniRV.runs/DRAM_synth_1/DRAM.dcp e:/Downloads/CPU_pipline/miniRV_basic/src/rtl/ip/DRAM/DRAM.dcp
 } _RESULT ] } { 
   send_msg_id runtcl-3 status "ERROR: Unable to successfully create or copy the sub-design checkpoint file."
   error "ERROR: Unable to successfully create or copy the sub-design checkpoint file."
 }
 
 if { [catch {
-  write_verilog -force -mode synth_stub e:/Downloads/miniRV_basic_minisys/miniRV_basic/src/rtl/ip/DRAM/DRAM_stub.v
+  write_verilog -force -mode synth_stub e:/Downloads/CPU_pipline/miniRV_basic/src/rtl/ip/DRAM/DRAM_stub.v
 } _RESULT ] } { 
   puts "CRITICAL WARNING: Unable to successfully create a Verilog synthesis stub for the sub-design. This may lead to errors in top level synthesis of the design. Error reported: $_RESULT"
 }
 
 if { [catch {
-  write_vhdl -force -mode synth_stub e:/Downloads/miniRV_basic_minisys/miniRV_basic/src/rtl/ip/DRAM/DRAM_stub.vhdl
+  write_vhdl -force -mode synth_stub e:/Downloads/CPU_pipline/miniRV_basic/src/rtl/ip/DRAM/DRAM_stub.vhdl
 } _RESULT ] } { 
   puts "CRITICAL WARNING: Unable to successfully create a VHDL synthesis stub for the sub-design. This may lead to errors in top level synthesis of the design. Error reported: $_RESULT"
 }
 
 if { [catch {
-  write_verilog -force -mode funcsim e:/Downloads/miniRV_basic_minisys/miniRV_basic/src/rtl/ip/DRAM/DRAM_sim_netlist.v
+  write_verilog -force -mode funcsim e:/Downloads/CPU_pipline/miniRV_basic/src/rtl/ip/DRAM/DRAM_sim_netlist.v
 } _RESULT ] } { 
   puts "CRITICAL WARNING: Unable to successfully create the Verilog functional simulation sub-design file. Post-Synthesis Functional Simulation with this file may not be possible or may give incorrect results. Error reported: $_RESULT"
 }
 
 if { [catch {
-  write_vhdl -force -mode funcsim e:/Downloads/miniRV_basic_minisys/miniRV_basic/src/rtl/ip/DRAM/DRAM_sim_netlist.vhdl
+  write_vhdl -force -mode funcsim e:/Downloads/CPU_pipline/miniRV_basic/src/rtl/ip/DRAM/DRAM_sim_netlist.vhdl
 } _RESULT ] } { 
   puts "CRITICAL WARNING: Unable to successfully create the VHDL functional simulation sub-design file. Post-Synthesis Functional Simulation with this file may not be possible or may give incorrect results. Error reported: $_RESULT"
 }
@@ -181,32 +181,32 @@ if { [catch {
 
 
 if { [catch {
-  file copy -force E:/Downloads/miniRV_basic_minisys/miniRV_basic/miniRV.runs/DRAM_synth_1/DRAM.dcp e:/Downloads/miniRV_basic_minisys/miniRV_basic/src/rtl/ip/DRAM/DRAM.dcp
+  file copy -force E:/Downloads/CPU_pipline/miniRV_basic/miniRV.runs/DRAM_synth_1/DRAM.dcp e:/Downloads/CPU_pipline/miniRV_basic/src/rtl/ip/DRAM/DRAM.dcp
 } _RESULT ] } { 
   send_msg_id runtcl-3 status "ERROR: Unable to successfully create or copy the sub-design checkpoint file."
   error "ERROR: Unable to successfully create or copy the sub-design checkpoint file."
 }
 
 if { [catch {
-  file rename -force E:/Downloads/miniRV_basic_minisys/miniRV_basic/miniRV.runs/DRAM_synth_1/DRAM_stub.v e:/Downloads/miniRV_basic_minisys/miniRV_basic/src/rtl/ip/DRAM/DRAM_stub.v
+  file rename -force E:/Downloads/CPU_pipline/miniRV_basic/miniRV.runs/DRAM_synth_1/DRAM_stub.v e:/Downloads/CPU_pipline/miniRV_basic/src/rtl/ip/DRAM/DRAM_stub.v
 } _RESULT ] } { 
   puts "CRITICAL WARNING: Unable to successfully create a Verilog synthesis stub for the sub-design. This may lead to errors in top level synthesis of the design. Error reported: $_RESULT"
 }
 
 if { [catch {
-  file rename -force E:/Downloads/miniRV_basic_minisys/miniRV_basic/miniRV.runs/DRAM_synth_1/DRAM_stub.vhdl e:/Downloads/miniRV_basic_minisys/miniRV_basic/src/rtl/ip/DRAM/DRAM_stub.vhdl
+  file rename -force E:/Downloads/CPU_pipline/miniRV_basic/miniRV.runs/DRAM_synth_1/DRAM_stub.vhdl e:/Downloads/CPU_pipline/miniRV_basic/src/rtl/ip/DRAM/DRAM_stub.vhdl
 } _RESULT ] } { 
   puts "CRITICAL WARNING: Unable to successfully create a VHDL synthesis stub for the sub-design. This may lead to errors in top level synthesis of the design. Error reported: $_RESULT"
 }
 
 if { [catch {
-  file rename -force E:/Downloads/miniRV_basic_minisys/miniRV_basic/miniRV.runs/DRAM_synth_1/DRAM_sim_netlist.v e:/Downloads/miniRV_basic_minisys/miniRV_basic/src/rtl/ip/DRAM/DRAM_sim_netlist.v
+  file rename -force E:/Downloads/CPU_pipline/miniRV_basic/miniRV.runs/DRAM_synth_1/DRAM_sim_netlist.v e:/Downloads/CPU_pipline/miniRV_basic/src/rtl/ip/DRAM/DRAM_sim_netlist.v
 } _RESULT ] } { 
   puts "CRITICAL WARNING: Unable to successfully create the Verilog functional simulation sub-design file. Post-Synthesis Functional Simulation with this file may not be possible or may give incorrect results. Error reported: $_RESULT"
 }
 
 if { [catch {
-  file rename -force E:/Downloads/miniRV_basic_minisys/miniRV_basic/miniRV.runs/DRAM_synth_1/DRAM_sim_netlist.vhdl e:/Downloads/miniRV_basic_minisys/miniRV_basic/src/rtl/ip/DRAM/DRAM_sim_netlist.vhdl
+  file rename -force E:/Downloads/CPU_pipline/miniRV_basic/miniRV.runs/DRAM_synth_1/DRAM_sim_netlist.vhdl e:/Downloads/CPU_pipline/miniRV_basic/src/rtl/ip/DRAM/DRAM_sim_netlist.vhdl
 } _RESULT ] } { 
   puts "CRITICAL WARNING: Unable to successfully create the VHDL functional simulation sub-design file. Post-Synthesis Functional Simulation with this file may not be possible or may give incorrect results. Error reported: $_RESULT"
 }
@@ -214,15 +214,15 @@ if { [catch {
 close [open .end.used_ip_cache.rst w]
 }; # end if cacheID 
 
-if {[file isdir E:/Downloads/miniRV_basic_minisys/miniRV_basic/miniRV.ip_user_files/ip/DRAM]} {
+if {[file isdir E:/Downloads/CPU_pipline/miniRV_basic/miniRV.ip_user_files/ip/DRAM]} {
   catch { 
-    file copy -force e:/Downloads/miniRV_basic_minisys/miniRV_basic/src/rtl/ip/DRAM/DRAM_stub.v E:/Downloads/miniRV_basic_minisys/miniRV_basic/miniRV.ip_user_files/ip/DRAM
+    file copy -force e:/Downloads/CPU_pipline/miniRV_basic/src/rtl/ip/DRAM/DRAM_stub.v E:/Downloads/CPU_pipline/miniRV_basic/miniRV.ip_user_files/ip/DRAM
   }
 }
 
-if {[file isdir E:/Downloads/miniRV_basic_minisys/miniRV_basic/miniRV.ip_user_files/ip/DRAM]} {
+if {[file isdir E:/Downloads/CPU_pipline/miniRV_basic/miniRV.ip_user_files/ip/DRAM]} {
   catch { 
-    file copy -force e:/Downloads/miniRV_basic_minisys/miniRV_basic/src/rtl/ip/DRAM/DRAM_stub.vhdl E:/Downloads/miniRV_basic_minisys/miniRV_basic/miniRV.ip_user_files/ip/DRAM
+    file copy -force e:/Downloads/CPU_pipline/miniRV_basic/src/rtl/ip/DRAM/DRAM_stub.vhdl E:/Downloads/CPU_pipline/miniRV_basic/miniRV.ip_user_files/ip/DRAM
   }
 }
 file delete __synthesis_is_running__

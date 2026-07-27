@@ -20,7 +20,7 @@ vlog -work blk_mem_gen_v8_4_8  -incr -mfcu  \
 "../../../ipstatic/simulation/blk_mem_gen_v8_4.v" \
 
 vlog -work xil_defaultlib  -incr -mfcu  \
-"../../../../src/rtl/ip/IROM/sim/IROM.v" \
+"../../../../miniRV.gen/IROM/ip/IROM/sim/IROM.v" \
 
 vlog -work xil_defaultlib \
 "glbl.v"

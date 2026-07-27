@@ -23,7 +23,7 @@ vlog -work blk_mem_gen_v8_4_8  -incr -v2k5 -l xpm -l blk_mem_gen_v8_4_8 -l xil_d
 "../../../ipstatic/simulation/blk_mem_gen_v8_4.v" \
 
 vlog -work xil_defaultlib  -incr -v2k5 -l xpm -l blk_mem_gen_v8_4_8 -l xil_defaultlib \
-"../../../../src/rtl/ip/IROM/sim/IROM.v" \
+"../../../../miniRV.gen/IROM/ip/IROM/sim/IROM.v" \
 
 vlog -work xil_defaultlib \
 "glbl.v"

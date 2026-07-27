@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GenRun Id="IROM_synth_1" LaunchPart="xc7a100tfgg484-1" LaunchTime="1784014460">
+<GenRun Id="IROM_synth_1" LaunchPart="xc7a100tfgg484-1" LaunchTime="1785135597">
   <File Type="PA-TCL" Name="IROM.tcl"/>
   <File Type="RDS-PROPCONSTRS" Name="IROM_drc_synth.rpt"/>
   <File Type="REPORTS-TCL" Name="IROM_reports.tcl"/>
@@ -10,8 +10,10 @@
   <File Type="VDS-TIMINGSUMMARY" Name="IROM_timing_summary_synth.rpt"/>
   <File Type="VDS-TIMING-PB" Name="IROM_timing_summary_synth.pb"/>
   <FileSet Name="sources" Type="BlockSrcs" RelSrcDir="$PSRCDIR/IROM" RelGenDir="$PGENDIR/IROM">
-    <File Path="$PPRDIR/src/rtl/ip/IROM/IROM.xci">
+    <File Path="$PSRCDIR/IROM/ip/IROM/IROM.xci">
       <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/src/rtl/ip/IROM/IROM.xci"/>
+        <Attr Name="ImportTime" Val="1785134913"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -23,8 +25,10 @@
     </Config>
   </FileSet>
   <FileSet Name="constrs_in" Type="BlockSrcs" RelSrcDir="$PSRCDIR/IROM" RelGenDir="$PGENDIR/IROM">
-    <File Path="$PPRDIR/src/rtl/ip/IROM/IROM.xci">
+    <File Path="$PSRCDIR/IROM/ip/IROM/IROM.xci">
       <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/src/rtl/ip/IROM/IROM.xci"/>
+        <Attr Name="ImportTime" Val="1785134913"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>
         <Attr Name="UsedIn" Val="simulation"/>
@@ -42,9 +46,7 @@
     </Config>
   </FileSet>
   <Strategy Version="1" Minor="2">
-    <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2024">
-      <Desc>Vivado Synthesis Defaults</Desc>
-    </StratHandle>
+    <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2024"/>
     <Step Id="synth_design"/>
   </Strategy>
 </GenRun>

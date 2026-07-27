@@ -1,7 +1,7 @@
 # compile verilog/system verilog design source files
 verilog xil_defaultlib  --include "../../../../src/rtl" --include "../../../../src/sim" --include "../../../../miniRV.gen/sources_1/ip/clk_wiz_0" \
 "../../../../src/rtl/ip/DRAM/sim/DRAM.v" \
-"../../../../src/rtl/ip/IROM/sim/IROM.v" \
+"../../../../miniRV.gen/IROM/ip/IROM/sim/IROM.v" \
 "../../../../miniRV.gen/sources_1/ip/clk_wiz_0/clk_wiz_0_clk_wiz.v" \
 "../../../../miniRV.gen/sources_1/ip/clk_wiz_0/clk_wiz_0.v" \
 "../../../../src/rtl/ALU.v" \

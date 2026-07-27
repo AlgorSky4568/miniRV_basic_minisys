@@ -4,7 +4,7 @@
 <!-- Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.                   -->
 <!-- Copyright 2022-2024 Advanced Micro Devices, Inc. All Rights Reserved.   -->
 
-<Project Product="Vivado" Version="7" Minor="67" Path="E:/Downloads/miniRV_basic_minisys/miniRV_basic/miniRV.xpr">
+<Project Product="Vivado" Version="7" Minor="67" Path="E:/Downloads/CPU_pipline/miniRV_basic/miniRV.xpr">
   <DefaultLaunch Dir="$PRUNDIR"/>
   <Configuration>
     <Option Name="Id" Val="8068a6fb3a134c46b6c8a18bdff0f3f6"/>
@@ -58,20 +58,20 @@
     <Option Name="IPUserFilesDir" Val="$PIPUSERFILESDIR"/>
     <Option Name="IPStaticSourceDir" Val="$PIPUSERFILESDIR/ipstatic"/>
     <Option Name="EnableBDX" Val="FALSE"/>
-    <Option Name="WTXSimLaunchSim" Val="1613"/>
+    <Option Name="WTXSimLaunchSim" Val="1617"/>
     <Option Name="WTModelSimLaunchSim" Val="0"/>
     <Option Name="WTQuestaLaunchSim" Val="0"/>
     <Option Name="WTIesLaunchSim" Val="0"/>
     <Option Name="WTVcsLaunchSim" Val="0"/>
     <Option Name="WTRivieraLaunchSim" Val="0"/>
     <Option Name="WTActivehdlLaunchSim" Val="0"/>
-    <Option Name="WTXSimExportSim" Val="276"/>
-    <Option Name="WTModelSimExportSim" Val="276"/>
-    <Option Name="WTQuestaExportSim" Val="276"/>
+    <Option Name="WTXSimExportSim" Val="281"/>
+    <Option Name="WTModelSimExportSim" Val="281"/>
+    <Option Name="WTQuestaExportSim" Val="281"/>
     <Option Name="WTIesExportSim" Val="91"/>
-    <Option Name="WTVcsExportSim" Val="275"/>
-    <Option Name="WTRivieraExportSim" Val="275"/>
-    <Option Name="WTActivehdlExportSim" Val="275"/>
+    <Option Name="WTVcsExportSim" Val="280"/>
+    <Option Name="WTRivieraExportSim" Val="280"/>
+    <Option Name="WTActivehdlExportSim" Val="280"/>
     <Option Name="GenerateIPUpgradeLog" Val="TRUE"/>
     <Option Name="XSimRadix" Val="hex"/>
     <Option Name="XSimTimeUnit" Val="ns"/>
@@ -207,6 +207,12 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
+      <File Path="$PPRDIR/src/coe/ideal_pipline_test.coe">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
       <Config>
         <Option Name="DesignMode" Val="RTL"/>
         <Option Name="TopModule" Val="miniRV_SoC"/>
@@ -309,8 +315,10 @@
       </Config>
     </FileSet>
     <FileSet Name="IROM" Type="BlockSrcs" RelSrcDir="$PSRCDIR/IROM" RelGenDir="$PGENDIR/IROM">
-      <File Path="$PPRDIR/src/rtl/ip/IROM/IROM.xci">
+      <File Path="$PSRCDIR/IROM/ip/IROM/IROM.xci">
         <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/src/rtl/ip/IROM/IROM.xci"/>
+          <Attr Name="ImportTime" Val="1785134913"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
