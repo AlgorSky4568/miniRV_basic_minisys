@@ -43,6 +43,8 @@ module cpu_core(
     wire        is_div;
     wire        is_mul_div;
     reg         mul_div_flag;       // 乘除法运算的标志位信号
+    reg         id_rf1; 
+    reg         id_rf2; //这两者用来标识rs1和rs2是否被读取了
 
     // Register File
     wire [31:0] rf_rd1;
@@ -77,12 +79,17 @@ module cpu_core(
     wire        inst_finished;      // 指令执行完成的标志位信号
     reg         inst_finished_r;    // 复位：0，没复位：随便
 
-    // ============= ID阶段寄存器地址（用于RF读取和前递） =============
-    wire [4:0]  id_rs1;            // ID阶段读寄存器1地址
-    wire [4:0]  id_rs2;            // ID阶段读寄存器2地址
+    //数据冒险检测信号
+    wire rs1_id_ex_hazard;
+    wire rs2_id_ex_hazard;
+    wire rs1_id_mem_hazard;
+    wire rs2_id_mem_hazard;
+    wire rs1_id_wb_hazard;
+    wire rs2_id_wb_hazard;
+    wire pipline_stop = rs1_id_ex_hazard | rs2_id_ex_hazard | rs1_id_mem_hazard | rs2_id_mem_hazard | rs1_id_wb_hazard | rs2_id_wb_hazard;
+    wire mem_pipline_stop = rs1_id_mem_hazard | rs2_id_mem_hazard;
+    wire wb_pipline_stop = rs1_id_wb_hazard | rs2_id_wb_hazard;
 
-    assign id_rs1 = inst[19:15];
-    assign id_rs2 = inst[24:20];
 
     /***************************** IF *****************************/
     reg rst_r;  // 取cpu_rst下降沿
@@ -104,6 +111,7 @@ module cpu_core(
         .offset     (ext),
         .br         (br),
         .alu_c      (alu_c),
+        .pipline_stop(pipline_stop),
         .npc        (npc),
         .pc4        (pc4)
     );
@@ -121,9 +129,15 @@ module cpu_core(
     // 按照约定的时序，ifetch_inst只在ifetch_valid有效时有效，且它们仅有效1个时钟.
     // 此处是为了避免ifetch_valid撤销后，ifetch_inst发生变化从而导致指令执行出错.
     assign inst = ifetch_valid ? ifetch_inst : 32'h13 /* NOP */ ;
+    wire [4:0]  id_rs1;            // ID阶段读寄存器1地址
+    wire [4:0]  id_rs2;            // ID阶段读寄存器2地址
+
+    assign id_rs1 = inst[19:15];
+    assign id_rs2 = inst[24:20];
 
     reg[31:0] id_pc;
     reg[31:0] id_inst;
+    
 
     //将IF阶段取值和下一指令的PC存起来
     always@(posedge cpu_clk or posedge cpu_rst)begin
@@ -132,8 +146,14 @@ module cpu_core(
         id_inst <= 32'b0;
       end
       else begin
+        if(pipline_stop) begin
+          id_pc <= id_pc;
+          id_inst <= id_inst;
+        end
+        else begin
         id_pc <= pc; 
         id_inst <= inst;
+        end
       end
     end
 
@@ -202,6 +222,8 @@ module cpu_core(
     //这是从寄存器中取出来的两个数
     reg[31:0] ex_rd1;
     reg[31:0] ex_rd2;
+    reg[4:0] ex_rs1;
+    reg[4:0] ex_rs2;
 
     reg[31:0] ex_pc;
     reg[31:0] ex_ext; //立即数
@@ -212,9 +234,13 @@ module cpu_core(
     reg ex_rf_we;  //表示是否写回
     reg [4:0] ex_rf_wR; //写回寄存器
 
+
+    wire hazard_A;
+    
+
     // EX流水线寄存器：使用前递后的数据（fwd_rd1/fwd_rd2）
     always@(posedge cpu_clk or posedge cpu_rst)begin
-        if(cpu_rst)begin
+        if(cpu_rst || mem_pipline_stop || wb_pipline_stop)begin
             ex_rd1 <= 32'b0;
             ex_rd2 <= 32'b0;
             ex_pc <= 32'b0;
@@ -227,6 +253,8 @@ module cpu_core(
             ex_rf_wel <= 2'b0;
             ex_rf_we <= 1'b0;
             ex_rf_wR <= 5'b0;
+            ex_rs1 <= 5'b0;
+            ex_rs2 <= 5'b0;
         end
         else begin
             ex_rd1 <= rf_rd1;
@@ -241,11 +269,16 @@ module cpu_core(
             ex_rf_wel <= rf_wsel;
             ex_rf_we <= rf_we;
             ex_rf_wR <= id_inst[11:7];
+            ex_rs1 <= id_rs1;
+            ex_rs2 <= id_rs2;
         end
     end
 
     assign alu_a = ex_alu_a_sel ? ex_pc  : ex_rd1;
     assign alu_b = ex_alu_b_sel ? ex_ext : ex_rd2;
+
+    assign rs1_id_ex_hazard = (ex_rf_wR == id_rs1) & ex_rf_we & !alua_sel & (ex_rf_wR != 5'h0);
+    assign rs2_id_ex_hazard = (ex_rf_wR == id_rs2) & ex_rf_we & !alub_sel & (ex_rf_wR != 5'h0); //此处选择的是alub_sel，而不是ex_alu_b_sel，因为ex_alu_b_sel是流水线寄存器的值，而alub_sel是当前指令的值，我要判断的是现在处于ID阶段的指令是否读取了rs1和rs2
 
     ALU U_ALU (
         .rst        (cpu_rst),
@@ -268,7 +301,7 @@ module cpu_core(
     reg [31:0] mem_ext;
 
     always@(posedge cpu_clk or posedge cpu_rst)begin
-        if(cpu_rst)begin
+        if(cpu_rst || wb_pipline_stop)begin
             mem_alu_c <= 32'b0;
             mem_rf_wel <= 2'b0;
             mem_rf_we <= 1'b0;
@@ -324,6 +357,8 @@ module cpu_core(
     end
 
     assign ld_st_done = daccess_rvalid | daccess_wresp;
+    assign rs1_id_mem_hazard = (mem_rf_wR == id_rs1) & mem_rf_we & !alua_sel & (mem_rf_wR != 5'h0);
+    assign rs2_id_mem_hazard = (mem_rf_wR == id_rs2) & mem_rf_we & !alub_sel & (mem_rf_wR != 5'h0);
 
     /***************************** WB *****************************/
     // 写回使能信号：
@@ -342,14 +377,16 @@ module cpu_core(
     // - WB_RAM: 访存读取数据（由ld_st_flag控制）
     always @(posedge cpu_clk) begin
         casex ({ld_st_flag, mem_rf_wel})
-            {1'b0, `WB_ALU}: rf_wD = mem_alu_c;
-            {1'b0, `WB_PC4}: rf_wD = mem_pc + 32'd4;     // 使用流水线化的PC+4，而非当前pc4
-            {1'b0, `WB_EXT}: rf_wD = mem_ext;             // 使用流水线化的立即数，而非当前ext
-            {1'b1, 2'b??  }: rf_wD = ram_ext;
-            default        : rf_wD = 32'h0;
+            {1'b0, `WB_ALU}: rf_wD <= mem_alu_c;
+            {1'b0, `WB_PC4}: rf_wD <= mem_pc + 32'd4;     // 使用流水线化的PC+4，而非当前pc4
+            {1'b0, `WB_EXT}: rf_wD <= mem_ext;             // 使用流水线化的立即数，而非当前ext
+            {1'b1, 2'b??  }: rf_wD <= ram_ext;
+            default        : rf_wD <= 32'h0;
         endcase
     end
 
+    assign rs1_id_wb_hazard = (rf_wR == id_rs1) & rf_we1 & id_rf1 & (rf_wR != 5'h0);
+    assign rs2_id_wb_hazard = (rf_wR == id_rs2) & rf_we1 & id_rf2 & (rf_wR != 5'h0);
     // 指令完成信号：
     // - 访存指令：ld_st_flag置位且读写完成
     // - 乘除法指令：mul_div_flag置位且运算完成

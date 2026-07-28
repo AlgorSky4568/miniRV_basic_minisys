@@ -7,6 +7,7 @@ module NPC (
     input  wire [31:0]  offset,
     input  wire         br,
     input  wire [31:0]  alu_c,
+    input  wire         pipline_stop,
     output reg  [31:0]  npc,
     output wire [31:0]  pc4
 );
@@ -14,6 +15,8 @@ module NPC (
     assign pc4 = pc + 32'h4;
 
     always @(*) begin
+        if (pipline_stop) npc = pc; //当流水线停顿时，PC停止更新
+        else begin
         case (op)
             `NPC_PC4 : npc = pc4;
             `NPC_JALR: npc = {alu_c[31:1], 1'b0};
@@ -21,6 +24,7 @@ module NPC (
             `NPC_JMP : npc = pc + offset;
             default  : npc = pc4;
         endcase
+        end
     end
 
 endmodule

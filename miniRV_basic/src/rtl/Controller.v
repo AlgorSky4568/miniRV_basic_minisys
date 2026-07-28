@@ -16,7 +16,9 @@ module Controller (
     output wire [ 2:0]  ram_r_op,
     output wire [ 3:0]  ram_w_op,
     output wire         rf_we,
-    output wire [ 1:0]  rf_wsel
+    output wire [ 1:0]  rf_wsel,
+    output wire         id_rf1,
+    output wire         id_rf2
 );
 
     // ===== 模板指令 =====
@@ -234,9 +236,9 @@ module Controller (
                   | {5{ALU_OP_REM  }} & `ALU_REM
                   | {5{ALU_OP_REMU }} & `ALU_REMU;
 
-    assign alua_sel = ALU_A_SEL_PC & `ALU_A_PC | ALU_A_SEL_RS1 & `ALU_A_RS1;
+    assign alua_sel = ALU_A_SEL_PC & `ALU_A_PC | ALU_A_SEL_RS1 & `ALU_A_RS1; //读rs1是0，取pc是1
 
-    assign alub_sel = ALU_B_SEL_RS2 & `ALU_B_RS2 | ALU_B_SEL_EXT & `ALU_B_EXT;
+    assign alub_sel = ALU_B_SEL_RS2 & `ALU_B_RS2 | ALU_B_SEL_EXT & `ALU_B_EXT; //读rs2是0，取扩展立即数是1
 
     assign ram_r_op = {3{RAM_EXT_B }} & `RAM_EXT_B
                     | {3{RAM_EXT_BU}} & `RAM_EXT_BU
