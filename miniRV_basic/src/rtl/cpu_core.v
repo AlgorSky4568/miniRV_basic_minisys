@@ -86,7 +86,7 @@ module cpu_core(
 
     /***************************** IF *****************************/
     reg rst_r;  // 取cpu_rst下降沿
-    wire first_req = rst_r & !cpu_rst;
+    wire first_req = rst_r & !cpu_rst; // 复位信号下降沿，首次取指
     always @(posedge cpu_clk) rst_r <= cpu_rst;
 
     // 复位信号发生边沿变化时首次取指; 取指完成后取下一条指令
@@ -125,13 +125,14 @@ module cpu_core(
     reg[31:0] id_pc;
     reg[31:0] id_inst;
 
+    //将IF阶段取值和下一指令的PC存起来
     always@(posedge cpu_clk or posedge cpu_rst)begin
       if(cpu_rst) begin
         id_pc <= 32'b0;
         id_inst <= 32'b0;
       end
       else begin
-        id_pc <= pc4;
+        id_pc <= pc; 
         id_inst <= inst;
       end
     end
@@ -198,16 +199,18 @@ module cpu_core(
     end
 
     /***************************** EX *****************************/
+    //这是从寄存器中取出来的两个数
     reg[31:0] ex_rd1;
     reg[31:0] ex_rd2;
+
     reg[31:0] ex_pc;
-    reg[31:0] ex_ext;
-    reg ex_alu_a_sel,ex_alu_b_sel;
-    reg[4:0] ex_alu_op;
-    reg[2:0] ex_ram_rop;
-    reg [1:0] ex_rf_wel;
-    reg ex_rf_we;
-    reg [4:0] ex_rf_wR;
+    reg[31:0] ex_ext; //立即数
+    reg ex_alu_a_sel,ex_alu_b_sel; //操作数a和b的选择信号
+    reg[4:0] ex_alu_op; //ALU的操作信号
+    reg[2:0] ex_ram_rop; //访存读操作信号
+    reg [1:0] ex_rf_wel; //确定用哪个数据写回
+    reg ex_rf_we;  //表示是否写回
+    reg [4:0] ex_rf_wR; //写回寄存器
 
     // EX流水线寄存器：使用前递后的数据（fwd_rd1/fwd_rd2）
     always@(posedge cpu_clk or posedge cpu_rst)begin
@@ -237,7 +240,7 @@ module cpu_core(
             ex_ram_wop <= ram_wop;      // 流水线化ram_wop
             ex_rf_wel <= rf_wsel;
             ex_rf_we <= rf_we;
-            ex_rf_wR <= inst[11:7];
+            ex_rf_wR <= id_inst[11:7];
         end
     end
 
@@ -256,6 +259,32 @@ module cpu_core(
     );
 
     /***************************** MEM *****************************/
+    //需要从EX传递过来的信号：alu_c，几个写回信号,pc,立即数
+    reg[31:0] mem_alu_c;
+    reg [1:0] mem_rf_wel;
+    reg       mem_rf_we;
+    reg [4:0] mem_rf_wR;
+    reg [31:0] mem_pc;
+    reg [31:0] mem_ext;
+
+    always@(posedge cpu_clk or posedge cpu_rst)begin
+        if(cpu_rst)begin
+            mem_alu_c <= 32'b0;
+            mem_rf_wel <= 2'b0;
+            mem_rf_we <= 1'b0;
+            mem_rf_wR <= 5'b0;
+            mem_pc <= 32'b0;
+            mem_ext <= 32'b0;
+        end
+        else begin
+            mem_alu_c <= alu_c;
+            mem_rf_wel <= ex_rf_wel;
+            mem_rf_we <= ex_rf_we;
+            mem_rf_wR <= ex_rf_wR;
+            mem_pc <= ex_pc;
+            mem_ext <= ex_ext;
+        end
+    end
 
 
     MREQ U_MEM_REQ (
@@ -300,22 +329,22 @@ module cpu_core(
     // 写回使能信号：
     // - Load指令：ld_st_flag置位且daccess_rvalid有效时写回
     // - 乘除法指令：mul_div_flag置位且运算结束时写回
-    // - 其他单周期指令：ifetch_valid有效且ex_rf_we置位时写回
+    // - 其他单周期指令：ifetch_valid有效且mem_rf_we置位时写回
     //   注意：此处不再依赖ID阶段的is_ld_st/is_mul_div，避免多周期指令阻塞前一条指令的写回
     assign rf_we1 = ld_st_flag   & daccess_rvalid |
                     mul_div_flag & !mul_div_busy  |
-                    ifetch_valid & ex_rf_we;
+                    ifetch_valid & mem_rf_we;
 
-    assign rf_wR  = ld_st_flag | mul_div_flag ? rf_wR_r : ex_rf_wR;
+    assign rf_wR  = ld_st_flag | mul_div_flag ? rf_wR_r : mem_rf_wR;
 
     // 写回数据选择：
-    // - WB_ALU: ALU计算结果（使用ex_pc+4计算返回地址，使用ex_ext作为立即数）
+    // - WB_ALU: ALU计算结果（使用mem_pc+4计算返回地址，使用mem_ext作为立即数）
     // - WB_RAM: 访存读取数据（由ld_st_flag控制）
-    always @(*) begin
-        casex ({ld_st_flag, ex_rf_wel})
-            {1'b0, `WB_ALU}: rf_wD = alu_c;
-            {1'b0, `WB_PC4}: rf_wD = ex_pc + 32'd4;     // 使用流水线化的PC+4，而非当前pc4
-            {1'b0, `WB_EXT}: rf_wD = ex_ext;             // 使用流水线化的立即数，而非当前ext
+    always @(posedge cpu_clk) begin
+        casex ({ld_st_flag, mem_rf_wel})
+            {1'b0, `WB_ALU}: rf_wD = mem_alu_c;
+            {1'b0, `WB_PC4}: rf_wD = mem_pc + 32'd4;     // 使用流水线化的PC+4，而非当前pc4
+            {1'b0, `WB_EXT}: rf_wD = mem_ext;             // 使用流水线化的立即数，而非当前ext
             {1'b1, 2'b??  }: rf_wD = ram_ext;
             default        : rf_wD = 32'h0;
         endcase
