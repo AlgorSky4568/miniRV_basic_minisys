@@ -73,6 +73,8 @@ module cpu_core(
     wire [31:0] da_wdata;
     wire [31:0] ram_ext;
     wire        is_ld_st;
+    wire        ex_is_ld_st;
+    wire        mem_is_ld_st;
     reg         ld_st_flag;
     wire        ld_st_done;         // 访存完成的标志位信号
 
@@ -96,8 +98,15 @@ module cpu_core(
     wire first_req = rst_r & !cpu_rst; // 复位信号下降沿，首次取指
     always @(posedge cpu_clk) rst_r <= cpu_rst;
 
-    // 复位信号发生边沿变化时首次取指; 取指完成后取下一条指令
-    assign ifetch_req  = first_req | ifetch_valid;
+
+    wire pause_ifetch  = (mem_is_ld_st | is_ld_st | ex_is_ld_st) & !ld_st_done |
+                            (mul_div_busy | is_mul_div);
+    wire resume_ifetch = ld_st_done | !mul_div_busy;
+
+    assign ifetch_req  = !pause_ifetch & (first_req    |    // 复位后首次取指
+                                        ifetch_valid |    // 上一条已取回，同时立即取下一条
+                                        br      |    // 静态分支预测错误，立即用正确的地址取指
+                                        resume_ifetch);   // 数据访存或乘除运算结束，继续取指
     assign ifetch_addr = pc;
     
     // npc计算器
@@ -141,7 +150,7 @@ module cpu_core(
 
     //将IF阶段取值和下一指令的PC存起来
     always@(posedge cpu_clk or posedge cpu_rst)begin
-      if(cpu_rst) begin
+      if(cpu_rst || br) begin
         id_pc <= 32'b0;
         id_inst <= 32'b0;
       end
@@ -240,7 +249,7 @@ module cpu_core(
 
     // EX流水线寄存器：使用前递后的数据（fwd_rd1/fwd_rd2）
     always@(posedge cpu_clk or posedge cpu_rst)begin
-        if(cpu_rst)begin
+        if(cpu_rst || br)begin
             ex_rd1 <= 32'b0;
             ex_rd2 <= 32'b0;
             ex_pc <= 32'b0;
@@ -295,6 +304,7 @@ module cpu_core(
 
     assign alu_a = ex_alu_a_sel ? ex_pc  : ex_rd1;
     assign alu_b = ex_alu_b_sel ? ex_ext : ex_rd2;
+    assign ex_is_ld_st = (ex_ram_rop != `RAM_EXT_N) | (ex_ram_wop != `RAM_WE_N);
 
     assign rs1_id_ex_hazard = (ex_rf_wR == id_rs1) & ex_rf_we & !alua_sel & (ex_rf_wR != 5'h0);
     assign rs2_id_ex_hazard = (ex_rf_wR == id_rs2) & ex_rf_we & !alub_sel & (ex_rf_wR != 5'h0); //此处选择的是alub_sel，而不是ex_alu_b_sel，因为ex_alu_b_sel是流水线寄存器的值，而alub_sel是当前指令的值，我要判断的是现在处于ID阶段的指令是否读取了rs1和rs2
@@ -318,6 +328,10 @@ module cpu_core(
     reg [4:0] mem_rf_wR;
     reg [31:0] mem_pc;
     reg [31:0] mem_ext;
+    reg[2:0] mem_ram_rop; //访存读操作信号
+    reg  [ 3:0] mem_ram_wop;        // 流水线化的ram_wop
+    reg [31:0] mem_rd2;
+
 
     always@(posedge cpu_clk or posedge cpu_rst)begin
         if(cpu_rst)begin
@@ -327,6 +341,9 @@ module cpu_core(
             mem_rf_wR <= 5'b0;
             mem_pc <= 32'b0;
             mem_ext <= 32'b0;
+            mem_ram_rop <= 3'b0;
+            mem_ram_wop <= 4'b0;
+            mem_rd2 <= 32'b0;
         end
         else begin
             if(wb_pipline_stop)begin
@@ -336,6 +353,9 @@ module cpu_core(
                 mem_rf_wR <= mem_rf_wR;
                 mem_pc <= mem_pc;
                 mem_ext <= mem_ext;
+                mem_ram_rop <= mem_ram_rop;
+                mem_ram_wop <= mem_ram_wop;
+                mem_rd2 <= mem_rd2;
             end
             else begin
             mem_alu_c <= alu_c;
@@ -344,20 +364,23 @@ module cpu_core(
             mem_rf_wR <= ex_rf_wR;
             mem_pc <= ex_pc;
             mem_ext <= ex_ext;
+            mem_ram_rop <= ex_ram_rop;
+            mem_ram_wop <= ex_ram_wop;
+            mem_rd2 <= ex_rd2;
             end
         end
     end
 
 
     MREQ U_MEM_REQ (
-        .ram_addr   (alu_c),
+        .ram_addr   (mem_alu_c),
 
-        .ram_rop    (ex_ram_rop),
+        .ram_rop    (mem_ram_rop),
         .da_ren     (da_ren),
         .da_addr    (da_addr),
 
-        .ram_wop    (ex_ram_wop),       // 使用流水线化后的ram_wop
-        .ram_wdata  (ex_rd2),           // 使用流水线化后的rs2数据
+        .ram_wop    (mem_ram_wop),       // 使用流水线化后的ram_wop
+        .ram_wdata  (mem_rd2),           // 使用流水线化后的rs2数据
         .da_wen     (da_wen),
         .da_wdata   (da_wdata)
     );
@@ -369,8 +392,9 @@ module cpu_core(
         .ext            (ram_ext)
     );
 
-    always @(posedge cpu_clk) if (is_ld_st) alu_c_r   <= alu_c;
-    always @(posedge cpu_clk) if (is_ld_st) ram_rop_r <= ram_rop;
+    assign mem_is_ld_st = (mem_ram_rop != `RAM_EXT_N) | (mem_ram_wop != `RAM_WE_N);
+    always @(posedge cpu_clk) if (mem_is_ld_st) alu_c_r   <= mem_alu_c;
+    always @(posedge cpu_clk) if (mem_is_ld_st) ram_rop_r <= mem_ram_rop;
 
     // Interface to Bus
     always @(posedge cpu_clk or posedge cpu_rst) begin
