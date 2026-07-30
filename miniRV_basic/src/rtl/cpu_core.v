@@ -240,7 +240,7 @@ module cpu_core(
 
     // EX流水线寄存器：使用前递后的数据（fwd_rd1/fwd_rd2）
     always@(posedge cpu_clk or posedge cpu_rst)begin
-        if(cpu_rst || mem_pipline_stop || wb_pipline_stop)begin
+        if(cpu_rst)begin
             ex_rd1 <= 32'b0;
             ex_rd2 <= 32'b0;
             ex_pc <= 32'b0;
@@ -257,20 +257,39 @@ module cpu_core(
             ex_rs2 <= 5'b0;
         end
         else begin
-            ex_rd1 <= rf_rd1;
-            ex_rd2 <= rf_rd2;
-            ex_pc <= id_pc;
-            ex_ext <= ext;
-            ex_alu_a_sel <= alua_sel;
-            ex_alu_b_sel <= alub_sel;
-            ex_alu_op <= alu_op;
-            ex_ram_rop <= ram_rop;
-            ex_ram_wop <= ram_wop;      // 流水线化ram_wop
-            ex_rf_wel <= rf_wsel;
-            ex_rf_we <= rf_we;
-            ex_rf_wR <= id_inst[11:7];
-            ex_rs1 <= id_rs1;
-            ex_rs2 <= id_rs2;
+            if(mem_pipline_stop || wb_pipline_stop)begin  //暂停ID/EX寄存器
+                ex_rd1 <= ex_rd1;
+                ex_rd2 <= ex_rd2;
+                ex_pc <= ex_pc;
+                ex_ext <= ex_ext;
+                ex_alu_a_sel <= ex_alu_a_sel;
+                ex_alu_b_sel <= ex_alu_b_sel;
+                ex_alu_op <= ex_alu_op;
+                ex_ram_rop <= ex_ram_rop;
+                ex_ram_wop <= ex_ram_wop;
+                ex_rf_wel <= ex_rf_wel;
+                ex_rf_we <= ex_rf_we;
+                ex_rf_wR <= ex_rf_wR;
+                ex_rs1 <= ex_rs1;
+                ex_rs2 <= ex_rs2;
+
+            end
+            else begin
+                ex_rd1 <= rf_rd1;
+                ex_rd2 <= rf_rd2;
+                ex_pc <= id_pc;
+                ex_ext <= ext;
+                ex_alu_a_sel <= alua_sel;
+                ex_alu_b_sel <= alub_sel;
+                ex_alu_op <= alu_op;
+                ex_ram_rop <= ram_rop;
+                ex_ram_wop <= ram_wop;      // 流水线化ram_wop
+                ex_rf_wel <= rf_wsel;
+                ex_rf_we <= rf_we;
+                ex_rf_wR <= id_inst[11:7];
+                ex_rs1 <= id_rs1;
+                ex_rs2 <= id_rs2;
+            end
         end
     end
 
@@ -301,7 +320,7 @@ module cpu_core(
     reg [31:0] mem_ext;
 
     always@(posedge cpu_clk or posedge cpu_rst)begin
-        if(cpu_rst || wb_pipline_stop)begin
+        if(cpu_rst)begin
             mem_alu_c <= 32'b0;
             mem_rf_wel <= 2'b0;
             mem_rf_we <= 1'b0;
@@ -310,12 +329,22 @@ module cpu_core(
             mem_ext <= 32'b0;
         end
         else begin
+            if(wb_pipline_stop)begin
+                mem_alu_c <= mem_alu_c;
+                mem_rf_wel <= mem_rf_wel;
+                mem_rf_we <= mem_rf_we;
+                mem_rf_wR <= mem_rf_wR;
+                mem_pc <= mem_pc;
+                mem_ext <= mem_ext;
+            end
+            else begin
             mem_alu_c <= alu_c;
             mem_rf_wel <= ex_rf_wel;
             mem_rf_we <= ex_rf_we;
             mem_rf_wR <= ex_rf_wR;
             mem_pc <= ex_pc;
             mem_ext <= ex_ext;
+            end
         end
     end
 
@@ -385,8 +414,8 @@ module cpu_core(
         endcase
     end
 
-    assign rs1_id_wb_hazard = (rf_wR == id_rs1) & rf_we1 & id_rf1 & (rf_wR != 5'h0);
-    assign rs2_id_wb_hazard = (rf_wR == id_rs2) & rf_we1 & id_rf2 & (rf_wR != 5'h0);
+    assign rs1_id_wb_hazard = (rf_wR == id_rs1) & rf_we1 & !alua_sel & (rf_wR != 5'h0);
+    assign rs2_id_wb_hazard = (rf_wR == id_rs2) & rf_we1 & !alub_sel & (rf_wR != 5'h0);
     // 指令完成信号：
     // - 访存指令：ld_st_flag置位且读写完成
     // - 乘除法指令：mul_div_flag置位且运算完成

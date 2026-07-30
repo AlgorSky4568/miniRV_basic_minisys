@@ -2,3 +2,6 @@ Running: xsim.dir/soc_simple_tb_behav/xsimk.exe -simmode gui -wdb soc_simple_tb_
 Design successfully loaded
 Design Loading Memory Usage: 11764 KB (Peak: 11764 KB)
 Design Loading CPU Usage: 30 ms
+Simulation completed
+Simulation Memory Usage: 22940 KB (Peak: 22940 KB)
+Simulation CPU Usage: 186 ms
