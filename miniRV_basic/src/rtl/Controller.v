@@ -254,4 +254,19 @@ module Controller (
     assign is_mul = MUL | MULH | MULHU;
     assign is_div = DIV | DIVU | REM | REMU;
 
+    // ===== 寄存器读标志（用于冒险检测）=====
+    // id_rf1: ID阶段的RS1是否被实际读取
+    //         当ALU A选择RS1(alua_sel=0) 且 不是JAL指令时 (JAL用RS1做link但行为特殊)
+    //         且 不是LUI时 (LUI不读任何源寄存器——模板中LUI不在ALU_A_SEL_RS1/
+    //         ALU_B_SEL_EXT列表，alua_sel/alub_sel均=0，若不加!LUI则id_rf1/2
+    //         误置1：LUI的立即数位段会充当伪rs1/rs2寄存器号，当该号恰好等于
+    //         EX中load的目标寄存器时load_use误触发→ex_stall=0→ID/EX前进覆盖
+    //         EX中的load（sh测试CMP 21/22：lui x7 的bits[24:20]=14==lw的x14）)
+    assign id_rf1 = !alua_sel & !JAL & !LUI;
+
+    // id_rf2: ID阶段的RS2是否被实际读取
+    //         当ALU B选择RS2(alub_sel=0) 或 是Store指令时 (Store读RS2做存储数据)
+    //         但LUI不读RS2（同id_rf1的原因）
+    assign id_rf2 = (!alub_sel | SB | SH | SW) & !LUI;
+
 endmodule

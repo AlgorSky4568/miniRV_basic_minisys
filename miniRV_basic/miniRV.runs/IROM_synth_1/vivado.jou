@@ -3,8 +3,8 @@
 # SW Build 5076996 on Wed May 22 18:37:14 MDT 2024
 # IP Build 5075265 on Wed May 22 21:45:21 MDT 2024
 # SharedData Build 5076995 on Wed May 22 18:29:18 MDT 2024
-# Start of session at: Thu Jul 30 14:42:57 2026
-# Process ID: 48920
+# Start of session at: Sat Aug  1 19:06:15 2026
+# Process ID: 86336
 # Current directory: E:/Downloads/CPU_pipline/miniRV_basic/miniRV.runs/IROM_synth_1
 # Command line: vivado.exe -log IROM.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source IROM.tcl
 # Log file: E:/Downloads/CPU_pipline/miniRV_basic/miniRV.runs/IROM_synth_1/IROM.vds
@@ -19,6 +19,6 @@
 # Host memory       :34124 MB
 # Swap memory       :2952 MB
 # Total Virtual     :37077 MB
-# Available Virtual :11481 MB
+# Available Virtual :6917 MB
 #-----------------------------------------------------------
 source IROM.tcl -notrace

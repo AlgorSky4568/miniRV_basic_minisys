@@ -8,11 +8,12 @@
   **** SW Build 5076996 on Wed May 22 18:37:14 MDT 2024
   **** IP Build 5075265 on Wed May 22 21:45:21 MDT 2024
   **** SharedData Build 5076995 on Wed May 22 18:29:18 MDT 2024
-  **** Start of session at: Thu Jul 30 14:42:57 2026
+  **** Start of session at: Sat Aug  1 19:06:15 2026
     ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
     ** Copyright 2022-2024 Advanced Micro Devices, Inc. All Rights Reserved.
 
 source IROM.tcl -notrace
+create_project: Time (s): cpu = 00:00:13 ; elapsed = 00:00:16 . Memory (MB): peak = 530.375 ; gain = 199.352
 INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: IROM
 Command: synth_design -top IROM -part xc7a100tfgg484-1 -incremental_mode off -mode out_of_context
 Starting synth_design
@@ -22,9 +23,9 @@ INFO: [Device 21-403] Loading part xc7a100tfgg484-1
 INFO: [Device 21-9227] Part: xc7a100tfgg484-1 does not have CEAM library.
 INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 2 processes.
 INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
-INFO: [Synth 8-7075] Helper process launched with PID 34156
+INFO: [Synth 8-7075] Helper process launched with PID 156176
 ---------------------------------------------------------------------------------
-Starting RTL Elaboration : Time (s): cpu = 00:00:05 ; elapsed = 00:00:06 . Memory (MB): peak = 1409.438 ; gain = 447.137
+Starting RTL Elaboration : Time (s): cpu = 00:00:15 ; elapsed = 00:00:18 . Memory (MB): peak = 1409.766 ; gain = 449.055
 ---------------------------------------------------------------------------------
 WARNING: [Synth 8-7129] Port CLKB in module blk_mem_output_block is either unconnected or has no load
 WARNING: [Synth 8-7129] Port DOUTB_I[31] in module blk_mem_output_block is either unconnected or has no load
@@ -119,27 +120,27 @@ WARNING: [Synth 8-7129] Port INJECTDBITERR in module blk_mem_gen_prim_wrapper_in
 WARNING: [Synth 8-7129] Port ECCPIPECE in module blk_mem_gen_prim_wrapper_init__parameterized0 is either unconnected or has no load
 WARNING: [Synth 8-7129] Port ram_rstram_b in module blk_mem_gen_prim_wrapper_init__parameterized0 is either unconnected or has no load
 WARNING: [Synth 8-7129] Port ram_rstreg_b in module blk_mem_gen_prim_wrapper_init__parameterized0 is either unconnected or has no load
-WARNING: [Synth 8-7129] Port DOUTB[8] in module blk_mem_gen_prim_wrapper_init__parameterized9 is either unconnected or has no load
-WARNING: [Synth 8-7129] Port DOUTB[7] in module blk_mem_gen_prim_wrapper_init__parameterized9 is either unconnected or has no load
-WARNING: [Synth 8-7129] Port DOUTB[6] in module blk_mem_gen_prim_wrapper_init__parameterized9 is either unconnected or has no load
-WARNING: [Synth 8-7129] Port DOUTB[5] in module blk_mem_gen_prim_wrapper_init__parameterized9 is either unconnected or has no load
-WARNING: [Synth 8-7129] Port DOUTB[4] in module blk_mem_gen_prim_wrapper_init__parameterized9 is either unconnected or has no load
-WARNING: [Synth 8-7129] Port DOUTB[3] in module blk_mem_gen_prim_wrapper_init__parameterized9 is either unconnected or has no load
-WARNING: [Synth 8-7129] Port DOUTB[2] in module blk_mem_gen_prim_wrapper_init__parameterized9 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port DOUTB[8] in module blk_mem_gen_prim_wrapper_init__parameterized6 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port DOUTB[7] in module blk_mem_gen_prim_wrapper_init__parameterized6 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port DOUTB[6] in module blk_mem_gen_prim_wrapper_init__parameterized6 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port DOUTB[5] in module blk_mem_gen_prim_wrapper_init__parameterized6 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port DOUTB[4] in module blk_mem_gen_prim_wrapper_init__parameterized6 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port DOUTB[3] in module blk_mem_gen_prim_wrapper_init__parameterized6 is either unconnected or has no load
+WARNING: [Synth 8-7129] Port DOUTB[2] in module blk_mem_gen_prim_wrapper_init__parameterized6 is either unconnected or has no load
 INFO: [Common 17-14] Message 'Synth 8-7129' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings.
 ---------------------------------------------------------------------------------
-Finished RTL Elaboration : Time (s): cpu = 00:00:12 ; elapsed = 00:00:55 . Memory (MB): peak = 1825.617 ; gain = 863.316
+Finished RTL Elaboration : Time (s): cpu = 00:00:35 ; elapsed = 00:01:22 . Memory (MB): peak = 1826.973 ; gain = 866.262
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Handling Custom Attributes
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Handling Custom Attributes : Time (s): cpu = 00:00:12 ; elapsed = 00:00:55 . Memory (MB): peak = 1825.617 ; gain = 863.316
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:35 ; elapsed = 00:01:22 . Memory (MB): peak = 1826.973 ; gain = 866.262
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:12 ; elapsed = 00:00:55 . Memory (MB): peak = 1825.617 ; gain = 863.316
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:35 ; elapsed = 00:01:22 . Memory (MB): peak = 1826.973 ; gain = 866.262
 ---------------------------------------------------------------------------------
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.044 . Memory (MB): peak = 1825.617 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.048 . Memory (MB): peak = 1826.973 ; gain = 0.000
 INFO: [Netlist 29-17] Analyzing 13 Unisim elements for replacement
 INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
 INFO: [Project 1-570] Preparing netlist for logic optimization
@@ -152,31 +153,31 @@ Parsing XDC File [E:/Downloads/CPU_pipline/miniRV_basic/miniRV.runs/IROM_synth_1
 Finished Parsing XDC File [E:/Downloads/CPU_pipline/miniRV_basic/miniRV.runs/IROM_synth_1/dont_touch.xdc]
 Completed Processing XDC Constraints
 
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1825.617 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1875.145 ; gain = 0.000
 INFO: [Project 1-111] Unisim Transformation Summary:
 No Unisim elements were transformed.
 
-Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.097 . Memory (MB): peak = 1825.617 ; gain = 0.000
+Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.098 . Memory (MB): peak = 1875.344 ; gain = 0.199
 INFO: [Designutils 20-5008] Incremental synthesis strategy off
 ---------------------------------------------------------------------------------
-Finished Constraint Validation : Time (s): cpu = 00:00:28 ; elapsed = 00:01:13 . Memory (MB): peak = 1825.617 ; gain = 863.316
+Finished Constraint Validation : Time (s): cpu = 00:00:50 ; elapsed = 00:01:40 . Memory (MB): peak = 1875.344 ; gain = 914.633
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Loading Part and Timing Information
 ---------------------------------------------------------------------------------
 Loading part: xc7a100tfgg484-1
 ---------------------------------------------------------------------------------
-Finished Loading Part and Timing Information : Time (s): cpu = 00:00:28 ; elapsed = 00:01:13 . Memory (MB): peak = 1825.617 ; gain = 863.316
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:50 ; elapsed = 00:01:40 . Memory (MB): peak = 1875.344 ; gain = 914.633
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Applying 'set_property' XDC Constraints
 ---------------------------------------------------------------------------------
 Applied set_property KEEP_HIERARCHY = SOFT for U0. (constraint file  E:/Downloads/CPU_pipline/miniRV_basic/miniRV.runs/IROM_synth_1/dont_touch.xdc, line 9).
 ---------------------------------------------------------------------------------
-Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:28 ; elapsed = 00:01:13 . Memory (MB): peak = 1825.617 ; gain = 863.316
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:50 ; elapsed = 00:01:40 . Memory (MB): peak = 1875.344 ; gain = 914.633
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:28 ; elapsed = 00:01:14 . Memory (MB): peak = 1825.617 ; gain = 863.316
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:51 ; elapsed = 00:01:41 . Memory (MB): peak = 1875.344 ; gain = 914.633
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start RTL Component Statistics 
@@ -201,25 +202,25 @@ Start Cross Boundary and Area Optimization
 ---------------------------------------------------------------------------------
 WARNING: [Synth 8-7080] Parallel synthesis criteria is not met
 ---------------------------------------------------------------------------------
-Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:32 ; elapsed = 00:01:18 . Memory (MB): peak = 1825.617 ; gain = 863.316
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:55 ; elapsed = 00:01:46 . Memory (MB): peak = 1875.344 ; gain = 914.633
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Applying XDC Timing Constraints
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:44 ; elapsed = 00:01:31 . Memory (MB): peak = 1825.617 ; gain = 863.316
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:01:07 ; elapsed = 00:01:59 . Memory (MB): peak = 1875.344 ; gain = 914.633
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Timing Optimization
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Timing Optimization : Time (s): cpu = 00:00:44 ; elapsed = 00:01:31 . Memory (MB): peak = 1825.617 ; gain = 863.316
+Finished Timing Optimization : Time (s): cpu = 00:01:07 ; elapsed = 00:01:59 . Memory (MB): peak = 1875.344 ; gain = 914.633
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Technology Mapping
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Technology Mapping : Time (s): cpu = 00:00:44 ; elapsed = 00:01:31 . Memory (MB): peak = 1825.617 ; gain = 863.316
+Finished Technology Mapping : Time (s): cpu = 00:01:08 ; elapsed = 00:01:59 . Memory (MB): peak = 1875.344 ; gain = 914.633
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start IO Insertion
@@ -237,37 +238,37 @@ Start Final Netlist Cleanup
 Finished Final Netlist Cleanup
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished IO Insertion : Time (s): cpu = 00:00:52 ; elapsed = 00:01:40 . Memory (MB): peak = 1825.617 ; gain = 863.316
+Finished IO Insertion : Time (s): cpu = 00:01:10 ; elapsed = 00:02:02 . Memory (MB): peak = 1875.344 ; gain = 914.633
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Instances
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Instances : Time (s): cpu = 00:00:53 ; elapsed = 00:01:40 . Memory (MB): peak = 1825.617 ; gain = 863.316
+Finished Renaming Generated Instances : Time (s): cpu = 00:01:10 ; elapsed = 00:02:02 . Memory (MB): peak = 1875.344 ; gain = 914.633
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Rebuilding User Hierarchy
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:53 ; elapsed = 00:01:40 . Memory (MB): peak = 1825.617 ; gain = 863.316
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:01:10 ; elapsed = 00:02:02 . Memory (MB): peak = 1875.344 ; gain = 914.633
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Ports
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Ports : Time (s): cpu = 00:00:53 ; elapsed = 00:01:40 . Memory (MB): peak = 1825.617 ; gain = 863.316
+Finished Renaming Generated Ports : Time (s): cpu = 00:01:10 ; elapsed = 00:02:02 . Memory (MB): peak = 1875.344 ; gain = 914.633
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Handling Custom Attributes
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Handling Custom Attributes : Time (s): cpu = 00:00:53 ; elapsed = 00:01:40 . Memory (MB): peak = 1825.617 ; gain = 863.316
+Finished Handling Custom Attributes : Time (s): cpu = 00:01:10 ; elapsed = 00:02:02 . Memory (MB): peak = 1875.344 ; gain = 914.633
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Nets
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Nets : Time (s): cpu = 00:00:53 ; elapsed = 00:01:40 . Memory (MB): peak = 1825.617 ; gain = 863.316
+Finished Renaming Generated Nets : Time (s): cpu = 00:01:10 ; elapsed = 00:02:02 . Memory (MB): peak = 1875.344 ; gain = 914.633
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Writing Synthesis Report
@@ -290,21 +291,21 @@ Report Cell Usage:
 |5     |MUXF7    |    32|
 |6     |RAMB18E1 |     1|
 |7     |RAMB36E1 |    12|
-|12    |FDRE     |     5|
+|11    |FDRE     |     5|
 +------+---------+------+
 ---------------------------------------------------------------------------------
-Finished Writing Synthesis Report : Time (s): cpu = 00:00:53 ; elapsed = 00:01:40 . Memory (MB): peak = 1825.617 ; gain = 863.316
+Finished Writing Synthesis Report : Time (s): cpu = 00:01:10 ; elapsed = 00:02:02 . Memory (MB): peak = 1875.344 ; gain = 914.633
 ---------------------------------------------------------------------------------
 Synthesis finished with 0 errors, 0 critical warnings and 553 warnings.
-Synthesis Optimization Runtime : Time (s): cpu = 00:00:36 ; elapsed = 00:01:36 . Memory (MB): peak = 1825.617 ; gain = 863.316
-Synthesis Optimization Complete : Time (s): cpu = 00:00:53 ; elapsed = 00:01:41 . Memory (MB): peak = 1825.617 ; gain = 863.316
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:30 ; elapsed = 00:01:57 . Memory (MB): peak = 1875.344 ; gain = 866.262
+Synthesis Optimization Complete : Time (s): cpu = 00:01:10 ; elapsed = 00:02:03 . Memory (MB): peak = 1875.344 ; gain = 914.633
 INFO: [Project 1-571] Translating synthesized netlist
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.006 . Memory (MB): peak = 1825.617 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.008 . Memory (MB): peak = 1875.344 ; gain = 0.000
 INFO: [Netlist 29-17] Analyzing 45 Unisim elements for replacement
 INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
 INFO: [Project 1-570] Preparing netlist for logic optimization
 INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1825.617 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1875.344 ; gain = 0.000
 INFO: [Project 1-111] Unisim Transformation Summary:
 No Unisim elements were transformed.
 
@@ -312,11 +313,12 @@ Synth Design complete | Checksum: 956dc0ab
 INFO: [Common 17-83] Releasing license: Synthesis
 23 Infos, 101 Warnings, 0 Critical Warnings and 0 Errors encountered.
 synth_design completed successfully
-synth_design: Time (s): cpu = 00:00:59 ; elapsed = 00:02:06 . Memory (MB): peak = 1825.617 ; gain = 1283.562
-Write ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.004 . Memory (MB): peak = 1825.617 ; gain = 0.000
+synth_design: Time (s): cpu = 00:01:19 ; elapsed = 00:02:36 . Memory (MB): peak = 1875.344 ; gain = 1332.664
+Write ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.002 . Memory (MB): peak = 1875.344 ; gain = 0.000
 INFO: [Common 17-1381] The checkpoint 'E:/Downloads/CPU_pipline/miniRV_basic/miniRV.runs/IROM_synth_1/IROM.dcp' has been generated.
+INFO: [Coretcl 2-1648] Added synthesis output to IP cache for IP IROM, cache-ID = 26aca75ea93434c4
 INFO: [Coretcl 2-1174] Renamed 31 cell refs.
-Write ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.003 . Memory (MB): peak = 1825.617 ; gain = 0.000
+Write ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.003 . Memory (MB): peak = 1875.344 ; gain = 0.000
 INFO: [Common 17-1381] The checkpoint 'E:/Downloads/CPU_pipline/miniRV_basic/miniRV.runs/IROM_synth_1/IROM.dcp' has been generated.
 INFO: [Vivado 12-24828] Executing command : report_utilization -file IROM_utilization_synth.rpt -pb IROM_utilization_synth.pb
-INFO: [Common 17-206] Exiting Vivado at Thu Jul 30 14:45:14 2026...
+INFO: [Common 17-206] Exiting Vivado at Sat Aug  1 19:09:16 2026...
