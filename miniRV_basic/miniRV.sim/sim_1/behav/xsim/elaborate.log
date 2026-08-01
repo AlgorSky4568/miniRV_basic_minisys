@@ -10,6 +10,42 @@ WARNING: [VRFC 10-3091] actual bit length 32 differs from formal bit length 33 f
 WARNING: [VRFC 10-3091] actual bit length 32 differs from formal bit length 33 for port 'r' [E:/Downloads/CPU_pipline/miniRV_basic/src/rtl/ALU.v:128]
 WARNING: [VRFC 10-3091] actual bit length 30 differs from formal bit length 14 for port 'addra' [E:/Downloads/CPU_pipline/miniRV_basic/src/rtl/Inst_ROM.v:21]
 WARNING: [VRFC 10-3091] actual bit length 30 differs from formal bit length 15 for port 'addra' [E:/Downloads/CPU_pipline/miniRV_basic/src/rtl/Data_RAM.v:25]
-ERROR: [VRFC 10-3236] concurrent assignment to a non-net 'id_rf1' is not permitted [E:/Downloads/CPU_pipline/miniRV_basic/src/rtl/cpu_core.v:299]
-ERROR: [VRFC 10-3236] concurrent assignment to a non-net 'id_rf2' is not permitted [E:/Downloads/CPU_pipline/miniRV_basic/src/rtl/cpu_core.v:300]
-ERROR: [XSIM 43-3322] Static elaboration of top level Verilog design unit(s) in library work failed.
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module unisims_ver.IBUF
+Compiling module unisims_ver.PLLE2_ADV(CLKFBOUT_MULT=17,CLKIN...
+Compiling module unisims_ver.BUFG
+Compiling module xil_defaultlib.clk_wiz_0_clk_wiz
+Compiling module xil_defaultlib.clk_wiz_0
+Compiling module xil_defaultlib.NPC
+Compiling module xil_defaultlib.PC
+Compiling module xil_defaultlib.Controller
+Compiling module xil_defaultlib.RF
+Compiling module xil_defaultlib.SEXT
+Compiling module xil_defaultlib.multiplier_default
+Compiling module xil_defaultlib.multiplier(WIDTH=33)
+Compiling module xil_defaultlib.divider
+Compiling module xil_defaultlib.divider(WIDTH=33)
+Compiling module xil_defaultlib.ALU
+Compiling module xil_defaultlib.MREQ
+Compiling module xil_defaultlib.MEXT
+Compiling module xil_defaultlib.cpu_core
+Compiling module blk_mem_gen_v8_4_8.blk_mem_gen_v8_4_8_output_stage(...
+Compiling module blk_mem_gen_v8_4_8.blk_mem_gen_v8_4_8_softecc_outpu...
+Compiling module blk_mem_gen_v8_4_8.blk_mem_gen_v8_4_8_mem_module(C_...
+Compiling module blk_mem_gen_v8_4_8.blk_mem_gen_v8_4_8(C_FAMILY="art...
+Compiling module xil_defaultlib.IROM
+Compiling module xil_defaultlib.Inst_ROM
+Compiling module blk_mem_gen_v8_4_8.blk_mem_gen_v8_4_8_output_stage(...
+Compiling module blk_mem_gen_v8_4_8.blk_mem_gen_v8_4_8_softecc_outpu...
+Compiling module blk_mem_gen_v8_4_8.blk_mem_gen_v8_4_8_mem_module(C_...
+Compiling module blk_mem_gen_v8_4_8.blk_mem_gen_v8_4_8(C_FAMILY="art...
+Compiling module xil_defaultlib.DRAM
+Compiling module xil_defaultlib.Data_RAM
+Compiling module xil_defaultlib.cpu_top
+Compiling module xil_defaultlib.miniRV_SoC
+Compiling module xil_defaultlib.soc_simple_tb
+Compiling module xil_defaultlib.glbl
+Built simulation snapshot soc_simple_tb_behav

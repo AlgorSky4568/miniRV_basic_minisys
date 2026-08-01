@@ -45,8 +45,8 @@ module cpu_core(
     wire        is_div;
     wire        is_mul_div;
     reg         mul_div_flag;       // 乘除法运算的标志位信号
-    reg         id_rf1; 
-    reg         id_rf2; //这两者用来标识rs1和rs2是否被读取了
+    wire        id_rf1;
+    wire        id_rf2; //这两者用来标识rs1和rs2是否被读取了
 
     // Register File
     wire [31:0] rf_rd1;
