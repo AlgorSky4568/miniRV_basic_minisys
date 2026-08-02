@@ -358,8 +358,8 @@ module cpu_core(
     assign alu_b = ex_alu_b_sel ? ex_ext : ex_rd2;
     assign ex_is_ld_st = (ex_ram_rop != `RAM_EXT_N) | (ex_ram_wop != `RAM_WE_N);
 
-    assign rs1_id_ex_hazard = (ex_rf_wR == id_rs1) & ex_rf_we & !id_rf1 & (ex_rf_wR != 5'h0);
-    assign rs2_id_ex_hazard = (ex_rf_wR == id_rs2) & ex_rf_we & !id_rf2 & (ex_rf_wR != 5'h0); //此处选择的是alub_sel，而不是ex_alu_b_sel，因为ex_alu_b_sel是流水线寄存器的值，而alub_sel是当前指令的值，我要判断的是现在处于ID阶段的指令是否读取了rs1和rs2
+    assign rs1_id_ex_hazard = (ex_rf_wR == id_rs1) & ex_rf_we & id_rf1 & (ex_rf_wR != 5'h0);
+    assign rs2_id_ex_hazard = (ex_rf_wR == id_rs2) & ex_rf_we & id_rf2 & (ex_rf_wR != 5'h0); //此处选择的是alub_sel，而不是ex_alu_b_sel，因为ex_alu_b_sel是流水线寄存器的值，而alub_sel是当前指令的值，我要判断的是现在处于ID阶段的指令是否读取了rs1和rs2
 
     ALU U_ALU (
         .rst        (cpu_rst),
@@ -512,8 +512,8 @@ module cpu_core(
     end
 
     assign ld_st_done = daccess_rvalid | daccess_wresp;
-    assign rs1_id_mem_hazard = (mem_rf_wR == id_rs1) & mem_rf_we & !id_rf1 & (mem_rf_wR != 5'h0);
-    assign rs2_id_mem_hazard = (mem_rf_wR == id_rs2) & mem_rf_we & !id_rf2 & (mem_rf_wR != 5'h0);
+    assign rs1_id_mem_hazard = (mem_rf_wR == id_rs1) & mem_rf_we & id_rf1 & (mem_rf_wR != 5'h0);
+    assign rs2_id_mem_hazard = (mem_rf_wR == id_rs2) & mem_rf_we & id_rf2 & (mem_rf_wR != 5'h0);
 
     /***************************** WB *****************************/
     // 写回使能信号：
@@ -534,7 +534,7 @@ module cpu_core(
     // - WB_RAM: 访存读取数据（由ld_st_flag控制）
     always @(posedge cpu_clk) begin
         if (ld_pending & daccess_rvalid)
-            rf_wD = ram_ext;    // Load data（进 MEM 首拍锁存的 ram_rop_r/alu_c_r 保证正确）
+            rf_wD <= ram_ext;    // Load data（进 MEM 首拍锁存的 ram_rop_r/alu_c_r 保证正确）
         else if (mul_done_pulse)
             rf_wD = alu_c;      // D6b：乘除结果（EX 组合输出——完成拍组合值
                                 // 即运算结果；mem_alu_c 要等 mul_post 窗口
@@ -550,8 +550,8 @@ module cpu_core(
         end
     end
 
-    assign rs1_id_wb_hazard = (rf_wR == id_rs1) & rf_we1 & !id_rf1 & (rf_wR != 5'h0);
-    assign rs2_id_wb_hazard = (rf_wR == id_rs2) & rf_we1 & !id_rf2 & (rf_wR != 5'h0);
+    assign rs1_id_wb_hazard = (rf_wR == id_rs1) & rf_we1 & id_rf1 & (rf_wR != 5'h0);
+    assign rs2_id_wb_hazard = (rf_wR == id_rs2) & rf_we1 & id_rf2 & (rf_wR != 5'h0);
     assign ex_is_load = (ex_ram_rop != `RAM_EXT_N);
     assign mem_data_ok = !mem_is_ld_st | daccess_rvalid;
     assign load_use = ex_is_load &
