@@ -786,12 +786,12 @@ module cpu_core(
                                 // 即运算结果；mem_alu_c 要等 mul_post 窗口
                                 // 结束后才捕获到正确值，不能用于 WB）
         else begin
-            case (mem_rf_wel)
-                `WB_ALU: rf_wD = mem_alu_c;
-                `WB_PC4: rf_wD = mem_pc + 32'd4;     // 使用流水线化的PC+4，而非当前pc4
-                `WB_EXT: rf_wD = mem_ext;             // 使用流水线化的立即数，而非当前ext
-                `WB_RAM: rf_wD = ram_ext;
-                default: rf_wD = 32'h0;
+            casex ({ld_st_flag, mem_rf_wel})
+                {1'b0, `WB_ALU}: rf_wD <= mem_alu_c;
+                {1'b0, `WB_PC4}: rf_wD <= mem_pc + 32'd4;     // 使用流水线化的PC+4，而非当前pc4
+                {1'b0, `WB_EXT}: rf_wD <= mem_ext;             // 使用流水线化的立即数，而非当前ext
+                {1'b1, 2'b??  }: rf_wD <= ram_ext;
+                default        : rf_wD <= 32'h0;
             endcase
         end
     end

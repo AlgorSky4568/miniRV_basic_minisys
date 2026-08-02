@@ -778,7 +778,7 @@ module cpu_core(
     //    处理（ram_rop_r/alu_c_r 进 MEM 首拍锁存保证扩展正确），casex 仅按
     //    mem_rf_wel 分源即可（WB_RAM 分支为防御性，正常不会命中——load 在
     //    MEM 时第一分支已覆盖，且 term3 的 !mem_is_ld_st 排除重复 WB）。
-    always @(posedge cpu_clk) begin
+    always @(*) begin
         if (ld_pending & daccess_rvalid)
             rf_wD = ram_ext;    // Load data（进 MEM 首拍锁存的 ram_rop_r/alu_c_r 保证正确）
         else if (mul_done_pulse)
