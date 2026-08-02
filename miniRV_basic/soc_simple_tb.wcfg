@@ -11,15 +11,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="1,295.467 ns"></ZoomStartTime>
-      <ZoomEndTime time="1,444.668 ns"></ZoomEndTime>
-      <Cursor1Time time="1,320.000 ns"></Cursor1Time>
+      <ZoomStartTime time="1,360.017 ns"></ZoomStartTime>
+      <ZoomEndTime time="1,473.318 ns"></ZoomEndTime>
+      <Cursor1Time time="1,403.517 ns"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="234"></NameColumnWidth>
-      <ValueColumnWidth column_width="104"></ValueColumnWidth>
+      <ValueColumnWidth column_width="94"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="14" />
+   <WVObjectSize size="28" />
    <wvobject fp_name="/soc_simple_tb/DUT/sys_rst" type="logic">
       <obj_property name="ElementShortName">sys_rst</obj_property>
       <obj_property name="ObjectShortName">sys_rst</obj_property>
@@ -32,12 +32,12 @@
       <obj_property name="label">Peripherals</obj_property>
       <obj_property name="DisplayName">label</obj_property>
       <wvobject fp_name="/soc_simple_tb/DUT/sw" type="array">
-         <obj_property name="ElementShortName">sw[15:0]</obj_property>
-         <obj_property name="ObjectShortName">sw[15:0]</obj_property>
+         <obj_property name="ElementShortName">sw[23:0]</obj_property>
+         <obj_property name="ObjectShortName">sw[23:0]</obj_property>
       </wvobject>
       <wvobject fp_name="/soc_simple_tb/DUT/led" type="array">
-         <obj_property name="ElementShortName">led[15:0]</obj_property>
-         <obj_property name="ObjectShortName">led[15:0]</obj_property>
+         <obj_property name="ElementShortName">led[23:0]</obj_property>
+         <obj_property name="ObjectShortName">led[23:0]</obj_property>
       </wvobject>
       <wvobject fp_name="/soc_simple_tb/DUT/dig_en" type="array">
          <obj_property name="ElementShortName">dig_en[7:0]</obj_property>
@@ -99,5 +99,62 @@
    <wvobject fp_name="/soc_simple_tb/DUT/U_cpu/U_core/daccess_wresp" type="logic">
       <obj_property name="ElementShortName">daccess_wresp</obj_property>
       <obj_property name="ObjectShortName">daccess_wresp</obj_property>
+   </wvobject>
+   <wvobject fp_name="/soc_simple_tb/DUT/U_cpu/U_core/pipline_stop" type="logic">
+      <obj_property name="ElementShortName">pipline_stop</obj_property>
+      <obj_property name="ObjectShortName">pipline_stop</obj_property>
+   </wvobject>
+   <wvobject fp_name="/soc_simple_tb/DUT/U_cpu/U_core/mem_pipline_stop" type="logic">
+      <obj_property name="ElementShortName">mem_pipline_stop</obj_property>
+      <obj_property name="ObjectShortName">mem_pipline_stop</obj_property>
+   </wvobject>
+   <wvobject fp_name="/soc_simple_tb/DUT/U_cpu/U_core/wb_pipline_stop" type="logic">
+      <obj_property name="ElementShortName">wb_pipline_stop</obj_property>
+      <obj_property name="ObjectShortName">wb_pipline_stop</obj_property>
+   </wvobject>
+   <wvobject fp_name="/soc_simple_tb/DUT/U_cpu/U_core/alu_a" type="array">
+      <obj_property name="ElementShortName">alu_a[31:0]</obj_property>
+      <obj_property name="ObjectShortName">alu_a[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/soc_simple_tb/DUT/U_cpu/U_core/alu_b" type="array">
+      <obj_property name="ElementShortName">alu_b[31:0]</obj_property>
+      <obj_property name="ObjectShortName">alu_b[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/soc_simple_tb/DUT/U_cpu/U_core/alu_c" type="array">
+      <obj_property name="ElementShortName">alu_c[31:0]</obj_property>
+      <obj_property name="ObjectShortName">alu_c[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/soc_simple_tb/DUT/U_cpu/U_core/rs1_id_ex_hazard" type="logic">
+      <obj_property name="ElementShortName">rs1_id_ex_hazard</obj_property>
+      <obj_property name="ObjectShortName">rs1_id_ex_hazard</obj_property>
+   </wvobject>
+   <wvobject fp_name="/soc_simple_tb/DUT/U_cpu/U_core/rs1_id_mem_hazard" type="logic">
+      <obj_property name="ElementShortName">rs1_id_mem_hazard</obj_property>
+      <obj_property name="ObjectShortName">rs1_id_mem_hazard</obj_property>
+   </wvobject>
+   <wvobject fp_name="/soc_simple_tb/DUT/U_cpu/U_core/rs1_id_wb_hazard" type="logic">
+      <obj_property name="ElementShortName">rs1_id_wb_hazard</obj_property>
+      <obj_property name="ObjectShortName">rs1_id_wb_hazard</obj_property>
+   </wvobject>
+   <wvobject fp_name="/soc_simple_tb/DUT/U_cpu/U_core/ex_fwd_val" type="array">
+      <obj_property name="ElementShortName">ex_fwd_val[31:0]</obj_property>
+      <obj_property name="ObjectShortName">ex_fwd_val[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/soc_simple_tb/DUT/U_cpu/U_core/rf_we1" type="logic">
+      <obj_property name="ElementShortName">rf_we1</obj_property>
+      <obj_property name="ObjectShortName">rf_we1</obj_property>
+   </wvobject>
+   <wvobject fp_name="/soc_simple_tb/DUT/U_cpu/U_core/mem_alu_c" type="array">
+      <obj_property name="ElementShortName">mem_alu_c[31:0]</obj_property>
+      <obj_property name="ObjectShortName">mem_alu_c[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/soc_simple_tb/DUT/U_cpu/U_core/rf_wD" type="array">
+      <obj_property name="ElementShortName">rf_wD[31:0]</obj_property>
+      <obj_property name="ObjectShortName">rf_wD[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/soc_simple_tb/DUT/U_cpu/U_core/U_RF/regs" type="array">
+      <obj_property name="ElementShortName">regs[1:31][31:0]</obj_property>
+      <obj_property name="ObjectShortName">regs[1:31][31:0]</obj_property>
+      <obj_property name="isExpanded"></obj_property>
    </wvobject>
 </wave_config>
