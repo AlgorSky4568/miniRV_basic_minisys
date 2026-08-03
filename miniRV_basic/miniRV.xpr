@@ -58,20 +58,20 @@
     <Option Name="IPUserFilesDir" Val="$PIPUSERFILESDIR"/>
     <Option Name="IPStaticSourceDir" Val="$PIPUSERFILESDIR/ipstatic"/>
     <Option Name="EnableBDX" Val="FALSE"/>
-    <Option Name="WTXSimLaunchSim" Val="1653"/>
+    <Option Name="WTXSimLaunchSim" Val="1656"/>
     <Option Name="WTModelSimLaunchSim" Val="0"/>
     <Option Name="WTQuestaLaunchSim" Val="0"/>
     <Option Name="WTIesLaunchSim" Val="0"/>
     <Option Name="WTVcsLaunchSim" Val="0"/>
     <Option Name="WTRivieraLaunchSim" Val="0"/>
     <Option Name="WTActivehdlLaunchSim" Val="0"/>
-    <Option Name="WTXSimExportSim" Val="283"/>
-    <Option Name="WTModelSimExportSim" Val="283"/>
-    <Option Name="WTQuestaExportSim" Val="283"/>
+    <Option Name="WTXSimExportSim" Val="284"/>
+    <Option Name="WTModelSimExportSim" Val="284"/>
+    <Option Name="WTQuestaExportSim" Val="284"/>
     <Option Name="WTIesExportSim" Val="91"/>
-    <Option Name="WTVcsExportSim" Val="282"/>
-    <Option Name="WTRivieraExportSim" Val="282"/>
-    <Option Name="WTActivehdlExportSim" Val="282"/>
+    <Option Name="WTVcsExportSim" Val="283"/>
+    <Option Name="WTRivieraExportSim" Val="283"/>
+    <Option Name="WTActivehdlExportSim" Val="283"/>
     <Option Name="GenerateIPUpgradeLog" Val="TRUE"/>
     <Option Name="XSimRadix" Val="hex"/>
     <Option Name="XSimTimeUnit" Val="ns"/>
@@ -214,6 +214,12 @@
         </FileInfo>
       </File>
       <File Path="$PPRDIR/src/coe/pipline_test.coe">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PPRDIR/src/coe/pipline_test2.coe">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>

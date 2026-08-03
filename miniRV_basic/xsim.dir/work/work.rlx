@@ -1,0 +1,16 @@
+0.7
+2020.2
+May 22 2024
+19:03:11
+e:/Downloads/CPU_pipline/miniRV_basic/src/rtl/ALU.v,1785509147,verilog,,e:/Downloads/CPU_pipline/miniRV_basic/src/rtl/Controller.v,e:/Downloads/CPU_pipline/miniRV_basic/src/rtl/defines.vh,ALU,,,src\rtl,,,,,
+e:/Downloads/CPU_pipline/miniRV_basic/src/rtl/Controller.v,1785509135,verilog,,e:/Downloads/CPU_pipline/miniRV_basic/src/rtl/NPC.v,e:/Downloads/CPU_pipline/miniRV_basic/src/rtl/defines.vh,Controller,,,src\rtl,,,,,
+e:/Downloads/CPU_pipline/miniRV_basic/src/rtl/MEXT.v,1784116120,verilog,,e:/Downloads/CPU_pipline/miniRV_basic/src/rtl/MREQ.v,e:/Downloads/CPU_pipline/miniRV_basic/src/rtl/defines.vh,MEXT,,,src\rtl,,,,,
+e:/Downloads/CPU_pipline/miniRV_basic/src/rtl/MREQ.v,1784181771,verilog,,e:/Downloads/CPU_pipline/miniRV_basic/src/rtl/multiplier.v,e:/Downloads/CPU_pipline/miniRV_basic/src/rtl/defines.vh,MREQ,,,src\rtl,,,,,
+e:/Downloads/CPU_pipline/miniRV_basic/src/rtl/NPC.v,1785226714,verilog,,e:/Downloads/CPU_pipline/miniRV_basic/src/rtl/PC.v,e:/Downloads/CPU_pipline/miniRV_basic/src/rtl/defines.vh,NPC,,,src\rtl,,,,,
+e:/Downloads/CPU_pipline/miniRV_basic/src/rtl/PC.v,1784114479,verilog,,e:/Downloads/CPU_pipline/miniRV_basic/src/rtl/RF.v,,PC,,,src\rtl,,,,,
+e:/Downloads/CPU_pipline/miniRV_basic/src/rtl/RF.v,1784114479,verilog,,e:/Downloads/CPU_pipline/miniRV_basic/src/rtl/SEXT.v,,RF,,,src\rtl,,,,,
+e:/Downloads/CPU_pipline/miniRV_basic/src/rtl/SEXT.v,1785041316,verilog,,e:/Downloads/CPU_pipline/miniRV_basic/src/rtl/MEXT.v,e:/Downloads/CPU_pipline/miniRV_basic/src/rtl/defines.vh,SEXT,,,src\rtl,,,,,
+e:/Downloads/CPU_pipline/miniRV_basic/src/rtl/cpu_core.v,1785723394,verilog,,,e:/Downloads/CPU_pipline/miniRV_basic/src/rtl/defines.vh,cpu_core,,,src\rtl,,,,,
+e:/Downloads/CPU_pipline/miniRV_basic/src/rtl/defines.vh,1785041209,verilog,,,,,,,,,,,,
+e:/Downloads/CPU_pipline/miniRV_basic/src/rtl/divider.v,1784273280,verilog,,e:/Downloads/CPU_pipline/miniRV_basic/src/rtl/cpu_core.v,,divider,,,src\rtl,,,,,
+e:/Downloads/CPU_pipline/miniRV_basic/src/rtl/multiplier.v,1784273280,verilog,,e:/Downloads/CPU_pipline/miniRV_basic/src/rtl/divider.v,e:/Downloads/CPU_pipline/miniRV_basic/src/rtl/defines.vh,multiplier,,,src\rtl,,,,,

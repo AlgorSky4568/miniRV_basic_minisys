@@ -1,0 +1,22 @@
+INFO: [VRFC 10-2263] Analyzing Verilog file "e:/Downloads/CPU_pipline/miniRV_basic/src/rtl/ALU.v" into library work
+INFO: [VRFC 10-311] analyzing module ALU
+INFO: [VRFC 10-2263] Analyzing Verilog file "e:/Downloads/CPU_pipline/miniRV_basic/src/rtl/Controller.v" into library work
+INFO: [VRFC 10-311] analyzing module Controller
+INFO: [VRFC 10-2263] Analyzing Verilog file "e:/Downloads/CPU_pipline/miniRV_basic/src/rtl/NPC.v" into library work
+INFO: [VRFC 10-311] analyzing module NPC
+INFO: [VRFC 10-2263] Analyzing Verilog file "e:/Downloads/CPU_pipline/miniRV_basic/src/rtl/PC.v" into library work
+INFO: [VRFC 10-311] analyzing module PC
+INFO: [VRFC 10-2263] Analyzing Verilog file "e:/Downloads/CPU_pipline/miniRV_basic/src/rtl/RF.v" into library work
+INFO: [VRFC 10-311] analyzing module RF
+INFO: [VRFC 10-2263] Analyzing Verilog file "e:/Downloads/CPU_pipline/miniRV_basic/src/rtl/SEXT.v" into library work
+INFO: [VRFC 10-311] analyzing module SEXT
+INFO: [VRFC 10-2263] Analyzing Verilog file "e:/Downloads/CPU_pipline/miniRV_basic/src/rtl/MEXT.v" into library work
+INFO: [VRFC 10-311] analyzing module MEXT
+INFO: [VRFC 10-2263] Analyzing Verilog file "e:/Downloads/CPU_pipline/miniRV_basic/src/rtl/MREQ.v" into library work
+INFO: [VRFC 10-311] analyzing module MREQ
+INFO: [VRFC 10-2263] Analyzing Verilog file "e:/Downloads/CPU_pipline/miniRV_basic/src/rtl/multiplier.v" into library work
+INFO: [VRFC 10-311] analyzing module multiplier
+INFO: [VRFC 10-2263] Analyzing Verilog file "e:/Downloads/CPU_pipline/miniRV_basic/src/rtl/divider.v" into library work
+INFO: [VRFC 10-311] analyzing module divider
+INFO: [VRFC 10-2263] Analyzing Verilog file "e:/Downloads/CPU_pipline/miniRV_basic/src/rtl/cpu_core.v" into library work
+INFO: [VRFC 10-311] analyzing module cpu_core

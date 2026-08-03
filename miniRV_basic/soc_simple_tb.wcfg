@@ -11,15 +11,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="1,971.000 ns"></ZoomStartTime>
-      <ZoomEndTime time="2,198.601 ns"></ZoomEndTime>
-      <Cursor1Time time="1,393.900 ns"></Cursor1Time>
+      <ZoomStartTime time="1,274.700 ns"></ZoomStartTime>
+      <ZoomEndTime time="1,503.301 ns"></ZoomEndTime>
+      <Cursor1Time time="1,434.900 ns"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="234"></NameColumnWidth>
-      <ValueColumnWidth column_width="89"></ValueColumnWidth>
+      <ValueColumnWidth column_width="84"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="24" />
+   <WVObjectSize size="32" />
    <wvobject fp_name="/soc_simple_tb/DUT/sys_rst" type="logic">
       <obj_property name="ElementShortName">sys_rst</obj_property>
       <obj_property name="ObjectShortName">sys_rst</obj_property>
@@ -59,6 +59,10 @@
    <wvobject fp_name="/soc_simple_tb/DUT/U_cpu/U_core/ifetch_req" type="logic">
       <obj_property name="ElementShortName">ifetch_req</obj_property>
       <obj_property name="ObjectShortName">ifetch_req</obj_property>
+   </wvobject>
+   <wvobject fp_name="/soc_simple_tb/DUT/U_cpu/U_core/inst_finished" type="logic">
+      <obj_property name="ElementShortName">inst_finished</obj_property>
+      <obj_property name="ObjectShortName">inst_finished</obj_property>
    </wvobject>
    <wvobject fp_name="/soc_simple_tb/DUT/U_cpu/U_core/ifetch_addr" type="array">
       <obj_property name="ElementShortName">ifetch_addr[31:0]</obj_property>
@@ -135,6 +139,34 @@
    <wvobject fp_name="/soc_simple_tb/DUT/U_cpu/U_core/rf_wD" type="array">
       <obj_property name="ElementShortName">rf_wD[31:0]</obj_property>
       <obj_property name="ObjectShortName">rf_wD[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/soc_simple_tb/DUT/U_cpu/U_core/ex_bj_f" type="logic">
+      <obj_property name="ElementShortName">ex_bj_f</obj_property>
+      <obj_property name="ObjectShortName">ex_bj_f</obj_property>
+   </wvobject>
+   <wvobject fp_name="/soc_simple_tb/DUT/U_cpu/U_core/ex_rf_wR" type="array">
+      <obj_property name="ElementShortName">ex_rf_wR[4:0]</obj_property>
+      <obj_property name="ObjectShortName">ex_rf_wR[4:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/soc_simple_tb/DUT/U_cpu/U_core/id_rs1" type="array">
+      <obj_property name="ElementShortName">id_rs1[4:0]</obj_property>
+      <obj_property name="ObjectShortName">id_rs1[4:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/soc_simple_tb/DUT/U_cpu/U_core/rs1_id_ex_hazard" type="logic">
+      <obj_property name="ElementShortName">rs1_id_ex_hazard</obj_property>
+      <obj_property name="ObjectShortName">rs1_id_ex_hazard</obj_property>
+   </wvobject>
+   <wvobject fp_name="/soc_simple_tb/DUT/U_cpu/U_core/rs1_id_mem_hazard" type="logic">
+      <obj_property name="ElementShortName">rs1_id_mem_hazard</obj_property>
+      <obj_property name="ObjectShortName">rs1_id_mem_hazard</obj_property>
+   </wvobject>
+   <wvobject fp_name="/soc_simple_tb/DUT/U_cpu/U_core/load_use" type="logic">
+      <obj_property name="ElementShortName">load_use</obj_property>
+      <obj_property name="ObjectShortName">load_use</obj_property>
+   </wvobject>
+   <wvobject fp_name="/soc_simple_tb/DUT/U_cpu/U_core/pipline_stop" type="logic">
+      <obj_property name="ElementShortName">pipline_stop</obj_property>
+      <obj_property name="ObjectShortName">pipline_stop</obj_property>
    </wvobject>
    <wvobject fp_name="/soc_simple_tb/DUT/U_cpu/U_core/U_RF/regs" type="array">
       <obj_property name="ElementShortName">regs[1:31][31:0]</obj_property>
