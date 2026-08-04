@@ -1,3 +1,7 @@
+INFO: [VRFC 10-2263] Analyzing Verilog file "E:/Downloads/CPU_pipline/miniRV_basic/src/rtl/ip/DRAM/sim/DRAM.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module DRAM
+INFO: [VRFC 10-2263] Analyzing Verilog file "E:/Downloads/CPU_pipline/miniRV_basic/miniRV.gen/IROM/ip/IROM/sim/IROM.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module IROM
 INFO: [VRFC 10-2263] Analyzing Verilog file "E:/Downloads/CPU_pipline/miniRV_basic/miniRV.gen/sources_1/ip/clk_wiz_0/clk_wiz_0_clk_wiz.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module clk_wiz_0_clk_wiz
 INFO: [VRFC 10-2263] Analyzing Verilog file "E:/Downloads/CPU_pipline/miniRV_basic/miniRV.gen/sources_1/ip/clk_wiz_0/clk_wiz_0.v" into library xil_defaultlib
@@ -6,6 +10,10 @@ INFO: [VRFC 10-2263] Analyzing Verilog file "E:/Downloads/CPU_pipline/miniRV_bas
 INFO: [VRFC 10-311] analyzing module ALU
 INFO: [VRFC 10-2263] Analyzing Verilog file "E:/Downloads/CPU_pipline/miniRV_basic/src/rtl/Controller.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module Controller
+INFO: [VRFC 10-2263] Analyzing Verilog file "E:/Downloads/CPU_pipline/miniRV_basic/src/rtl/Data_RAM.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module Data_RAM
+INFO: [VRFC 10-2263] Analyzing Verilog file "E:/Downloads/CPU_pipline/miniRV_basic/src/rtl/Inst_ROM.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module Inst_ROM
 INFO: [VRFC 10-2263] Analyzing Verilog file "E:/Downloads/CPU_pipline/miniRV_basic/src/rtl/MEXT.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module MEXT
 INFO: [VRFC 10-2263] Analyzing Verilog file "E:/Downloads/CPU_pipline/miniRV_basic/src/rtl/MREQ.v" into library xil_defaultlib
